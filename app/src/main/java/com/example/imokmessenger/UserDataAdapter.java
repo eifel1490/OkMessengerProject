@@ -48,6 +48,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
+                Intent intent = new Intent("custom-message");
+                intent.putExtra("message",1);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });
     }
