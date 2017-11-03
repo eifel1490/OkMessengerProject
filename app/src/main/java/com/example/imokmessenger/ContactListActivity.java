@@ -18,6 +18,9 @@ public class ContactListActivity extends AppCompatActivity {
 
     //Recycleview
     RecyclerView rvContacts;
+    boolean wasChoise = false;
+    List<UserData> contactUserDataList;
+    Button btnConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +28,18 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.all_contacts_activity);
         //инициализируем Recycleview
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-
         getAllContacts();
+        if(isCheckInList(contactUserDataList)==false) {
+            btnConfirm = (Button) findViewById(R.id.button_confirm);
+            //делаем кнопку неактивной
+            btnConfirm.setEnabled(false);
+        }
+        else btnConfirm = (Button) findViewById(R.id.button_confirm);
     }
 
     private void getAllContacts() {
         //создаем список контактов
-        List<UserData> contactUserDataList = new ArrayList();
+        contactUserDataList = new ArrayList();
         //обьект контакта
         UserData userData;
         //создаем обьект contentResolver
@@ -96,6 +104,19 @@ public class ContactListActivity extends AppCompatActivity {
             //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
         }
+    }
+    
+    //метод проверяет был ли сделан выбор в списке 
+    public boolean isCheckInList(List<UserData> c) {
+        //прохождение по списку
+        boolean result = false;
+        for(int i = 0;i < c.size();i++){
+            if (c.get(i).isSolved()==true) {
+                result = true;
+                break;
+            }        
+        }
+        return result;
     }
 }
 
