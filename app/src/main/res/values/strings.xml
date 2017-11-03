@@ -3,4 +3,6 @@
     <string name="select_contacts_for_dispatch">Выберите контакты для СМС</string>
     <string name="choose_text_for_sms">Выберите текст для СМС</string>
     <string name="edit_data">Редактировать данные</string>
+    <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС</string>
+    <string name="text_for_button_confirm">Подтвердить</string>
 </resources>
