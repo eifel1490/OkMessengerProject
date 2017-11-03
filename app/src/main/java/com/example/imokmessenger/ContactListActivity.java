@@ -2,19 +2,28 @@ package com.example.imokmessenger;
 
 
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /*класс отображающий список конактов для пользователя*/
 public class ContactListActivity extends AppCompatActivity {
+
+    public static final String TAG = "myTag";
 
     //Recycleview
     RecyclerView rvContacts;
@@ -103,17 +112,45 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
     
-    //приемник локальных сообщений 
+    //приемник локальных сообщений(транслируются только в нашем приложении)
+    // принимает локальные ссобщения из UserDataAdapter
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
+            // получает значение из интента,пришедшего в сообщении
             String isPressed = intent.getStringExtra("message");
+            //если результат из интента ненулевой
             if(isPressed != null){
-                btnConfirm.setEnabled(true);
+                //и если он соответствует метке "нажато"
+                if(isPressed=="pressed") {
+                    //то кнопка Подтвердить становится активной
+                    btnConfirm.setEnabled(true);
+                }
+                //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
+                //и если ни одна не нажата,то кнопка Подтвердить неактивна
+                if(isListChecked(UserDataAdapter.getList())==false){
+
+                    btnConfirm.setEnabled(false);
+                }
             }
         }
     };
+
+    //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
+    //и true если нажата хотя бы одна кнопка
+    public boolean isListChecked(List<UserData>l){
+        boolean result = false;
+        for(int i=0;i<l.size();i++){
+            if(l.get(i).isSolved()==true){
+                result = true;
+                break;
+            }
+        }
+        Log.d(TAG,"result "+ result);
+        return result;
+    }
+
+
 }
 
 

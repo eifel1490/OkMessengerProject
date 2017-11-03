@@ -1,6 +1,8 @@
 package com.example.imokmessenger;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +21,17 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     public static final String TAG = "myLog";
 
     //список контактов
-    private List<UserData> userDataList;
+    private static List<UserData> userDataList;
     //обьект контекста
     private Context mContext;
     //конструктор адаптера,на вход принимает список контактов и обьект контекста
     public UserDataAdapter(List<UserData> userDataList, Context mContext){
         this.userDataList = userDataList;
         this.mContext = mContext;
+    }
+
+    public static List<UserData> getList(){
+        return userDataList;
     }
 
     @Override
@@ -47,11 +53,21 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         holder.tvCheckContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
-                Intent intent = new Intent("custom-message");
-                intent.putExtra("message","pressed");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                if(isChecked) {
+                    userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
+                    Intent intent = new Intent("custom-message");
+                    intent.putExtra("message", "pressed");
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                }
+                else {
+                    userDataList.get(holder.getAdapterPosition()).setSolved(false);
+                    Intent intent = new Intent("custom-message");
+                    intent.putExtra("message", "unpressed");
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                }
             }
+
         });
     }
 
