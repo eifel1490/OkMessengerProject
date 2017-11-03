@@ -18,7 +18,6 @@ public class ContactListActivity extends AppCompatActivity {
 
     //Recycleview
     RecyclerView rvContacts;
-    boolean wasChoise = false;
     List<UserData> contactUserDataList;
     Button btnConfirm;
 
@@ -29,12 +28,9 @@ public class ContactListActivity extends AppCompatActivity {
         //инициализируем Recycleview
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
         getAllContacts();
-        if(isCheckInList(contactUserDataList)==false) {
-            btnConfirm = (Button) findViewById(R.id.button_confirm);
-            //делаем кнопку неактивной
-            btnConfirm.setEnabled(false);
-        }
-        else btnConfirm = (Button) findViewById(R.id.button_confirm);
+        btnConfirm = (Button) findViewById(R.id.button_confirm);
+        btnConfirm.setEnabled(false);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
 
     private void getAllContacts() {
@@ -106,18 +102,16 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
     
-    //метод проверяет был ли сделан выбор в списке 
-    public boolean isCheckInList(List<UserData> c) {
-        //прохождение по списку
-        boolean result = false;
-        for(int i = 0;i < c.size();i++){
-            if (c.get(i).isSolved()==true) {
-                result = true;
-                break;
-            }        
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String isPressed = intent.getStringExtra("message");
+            if(isPressed != null){
+                btnConfirm.setEnabled(true);
+            }
         }
-        return result;
-    }
+    };
 }
 
 
