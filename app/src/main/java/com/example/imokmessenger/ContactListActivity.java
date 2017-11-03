@@ -30,6 +30,7 @@ public class ContactListActivity extends AppCompatActivity {
         getAllContacts();
         btnConfirm = (Button) findViewById(R.id.button_confirm);
         btnConfirm.setEnabled(false);
+        //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
 
@@ -102,6 +103,7 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
     
+    //приемник локальных сообщений 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
