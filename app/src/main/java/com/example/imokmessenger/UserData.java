@@ -4,7 +4,6 @@ import java.util.List;
 
 public class UserData {
 
-    private String ContactImage;
     private String ContactName;
     private String ContactNumber;
     private boolean mSolved;
