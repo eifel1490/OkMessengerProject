@@ -50,6 +50,13 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         //с помощью обьекта holder присваиваем полям tvContactName и tvPhoneNumber значения из обьекта UserData
         holder.tvContactName.setText(userData.getContactName());
         holder.tvPhoneNumber.setText(userData.getContactNumber());
+
+        //in some cases, it will prevent unwanted situations
+        holder.tvCheckContact.setOnCheckedChangeListener(null);
+
+        //if true, your checkbox will be selected, else unselected
+        holder.tvCheckContact.setChecked(userData.isSolved());
+
         holder.tvCheckContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
