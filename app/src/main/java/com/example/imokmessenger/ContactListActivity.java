@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -15,7 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +27,13 @@ import java.util.List;
 public class ContactListActivity extends AppCompatActivity {
 
     public static final String TAG = "myTag";
+    final String SAVED_VALUE = "saved_value";
 
     //Recycleview
     RecyclerView rvContacts;
     List<UserData> contactUserDataList;
     Button btnConfirm;
+    SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +153,25 @@ public class ContactListActivity extends AppCompatActivity {
         }
         Log.d(TAG,"result "+ result);
         return result;
+    }
+
+    public void btnConfirmClick(View v) {
+        //TODO идет возврат на главную.На главной кнопка Выбрать контакты становится неактивной.Очищаем бэкстек
+        //проверяем,чекнут ли хоть один пункт в списке методом isListChecked и
+        //пишем возвращенное значение в Preference
+        sPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        if(isListChecked(UserDataAdapter.getList())==true) {
+            ed.putString(SAVED_VALUE,"listNotEmpty");
+        }
+        if(isListChecked(UserDataAdapter.getList())==false) {
+            ed.putString(SAVED_VALUE,"listEmpty");
+        }
+        ed.commit();
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
 
