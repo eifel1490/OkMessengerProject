@@ -25,6 +25,16 @@ public class UserDataSingleton {
         dataList.add(userData);
     }
 
+    public void setData(int index,UserData userData){
+        dataList.set(index,userData);
+    }
+
+    public void deleteData(int index){
+        dataList.remove(index);
+    }
+
+
+
 
 
     public List<UserData> getdataList() {

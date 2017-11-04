@@ -22,18 +22,20 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 /*класс отображающий список конактов для пользователя*/
 public class ContactListActivity extends AppCompatActivity {
 
     public static final String TAG = "myTag";
-    final String SAVED_VALUE = "saved_value";
+
 
     //Recycleview
     RecyclerView rvContacts;
     List<UserData> contactUserDataList;
     Button btnConfirm;
     SharedPreferences sPref;
+    UserDataSingleton userDataSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,16 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.all_contacts_activity);
         //инициализируем Recycleview
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-        getAllContacts();
+
         btnConfirm = (Button) findViewById(R.id.button_confirm);
         btnConfirm.setEnabled(false);
+        userDataSingleton = UserDataSingleton.getInstance();
+        getAllContacts();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
 
     private void getAllContacts() {
-        //создаем список контактов
-        contactUserDataList = new ArrayList();
         //обьект контакта
         UserData userData;
         //создаем обьект contentResolver
@@ -93,23 +95,14 @@ public class ContactListActivity extends AppCompatActivity {
                     //закрываем phoneCursor
                     phoneCursor.close();
 
-                    /*НЕНУЖНЫЙ БЛОК "ПОЛУЧЕНИЕ ИМЕЙЛА"
-                    Cursor emailCursor = contentResolver.query(
-                            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                            new String[]{id}, null);
-                    while (emailCursor.moveToNext()) {
-                        String emailId = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    }*/
                     //поле "выбрано" по умолчанию ставим в "Не выбрано"
                     userData.setSolved(false);
                     //добавляем обьект в contactUserDataList
-                    contactUserDataList.add(userData);
+                    userDataSingleton.getdataList().add(userData);
                 }
             }
             //создаем обьект адаптера,ему передается ArrayList и обьект контекста
-            UserDataAdapter contactAdapter = new UserDataAdapter(contactUserDataList, getApplicationContext());
+            UserDataAdapter contactAdapter = new UserDataAdapter(userDataSingleton.getdataList(), getApplicationContext());
             //расположение будет вертикальным списком
             rvContacts.setLayoutManager(new LinearLayoutManager(this));
             //присваиваем адаптер
@@ -133,7 +126,7 @@ public class ContactListActivity extends AppCompatActivity {
                 }
                 //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
                 //и если ни одна не нажата,то кнопка Подтвердить неактивна
-                if(isListChecked(UserDataAdapter.getList())==false){
+                if(isListChecked()==false){
 
                     btnConfirm.setEnabled(false);
                 }
@@ -143,7 +136,9 @@ public class ContactListActivity extends AppCompatActivity {
 
     //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
     //и true если нажата хотя бы одна кнопка
-    public boolean isListChecked(List<UserData>l){
+    public boolean isListChecked(){
+        UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
+        List<UserData>l = userDataSingleton.getdataList();
         boolean result = false;
         for(int i=0;i<l.size();i++){
             if(l.get(i).isSolved()==true){
@@ -156,18 +151,20 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     public void btnConfirmClick(View v) {
-        //TODO идет возврат на главную.На главной кнопка Выбрать контакты становится неактивной.Очищаем бэкстек
-        //проверяем,чекнут ли хоть один пункт в списке методом isListChecked и
-        //пишем возвращенное значение в Preference
-        sPref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        if(isListChecked(UserDataAdapter.getList())==true) {
-            ed.putString(SAVED_VALUE,"listNotEmpty");
+
+        if(isListChecked()==true) {
+            ContactPreferences.setStoredQuery(this,"listWithChecked");
         }
-        if(isListChecked(UserDataAdapter.getList())==false) {
-            ed.putString(SAVED_VALUE,"listEmpty");
-        }
-        ed.commit();
+        else ContactPreferences.setStoredQuery(this,"listWithoutChecked");
+
+        //TEST
+        UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
+        List<UserData>l = userDataSingleton.getdataList();
+        for(int i=0;i<l.size();i++){
+                Log.d(TAG,l.get(i).getContactName()+" "+l.get(i).isSolved());
+            }
+
+
         Intent intent = new Intent(this,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

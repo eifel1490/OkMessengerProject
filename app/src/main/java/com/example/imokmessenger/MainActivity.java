@@ -14,7 +14,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
 
-    final String SAVED_VALUE = "saved_value";
     public static final String TAG = "myLog";
 
     Button chooseContacts, createMessageText, editData;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createMessageText.setOnClickListener(this);
         editData.setOnClickListener(this);
         testList = new UserData().getList();
-        //TODO проверка преференса,в зависимости от этого ставим кнопку Выбрать контакты активной или нет
+
     }
 
     //обработчик нажатия на кнопки
@@ -47,27 +46,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSelectContacts:
-                Intent intent = new Intent(this,ContactListActivity.class);
-                startActivity(intent);
+                Intent intentSelectContact = new Intent(this,ContactListActivity.class);
+                startActivity(intentSelectContact);
                 break;
             case R.id.btnSmsText:
 
 
                 break;
             case R.id.btnEdit:
+                chooseContacts.setEnabled(true);
 
-                break;
         }
     }
 
     boolean getValueFromPreference() {
-        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-        String result = sPref.getString(SAVED_VALUE,"");
-        Log.d(TAG,"result = ");
-        if(result.equals("listNotEmpty")){
+
+        String result = ContactPreferences.getStoredQuery(this);
+        Log.d(TAG,"result = "+result);
+        if(result.equals("listWithChecked")){
             return true;
         }
         else return false;
+
     }
 
 }
