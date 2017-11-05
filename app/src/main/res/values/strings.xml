@@ -6,4 +6,5 @@
     <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС</string>
     <string name="text_for_button_confirm">Подтвердить</string>
     <string name="hint_text">Введите текст сообщения</string>
+    
 </resources>
