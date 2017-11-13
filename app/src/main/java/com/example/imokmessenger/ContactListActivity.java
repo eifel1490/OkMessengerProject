@@ -56,6 +56,7 @@ public class ContactListActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
 
+    //метод выбирает контакты из курсора contentResolver-а и пишет их построчно в БД
     private void getAllContacts() {
         
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -111,14 +112,58 @@ public class ContactListActivity extends AppCompatActivity {
                     phoneCursor.close();
                 }
             }
-            //создаем обьект адаптера,ему передается ArrayList и обьект контекста
-            UserDataAdapter contactAdapter = new UserDataAdapter(userDataSingleton.getdataList(), getApplicationContext());
+        }
+    }
+    
+    //метод запускающий адаптер, на вход принимает список UserData
+    public void adapterLauncher(){
+        List<UserData> list = getListFromDatabase();
+        //создаем обьект адаптера,ему передается ArrayList и обьект контекста
+            UserDataAdapter contactAdapter = new UserDataAdapter(list, getApplicationContext());
             //расположение будет вертикальным списком
             rvContacts.setLayoutManager(new LinearLayoutManager(this));
             //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
-        }
+    
     }
+    
+    //метод формирующий список UserData из данных БД
+    public List<UserData> getListFromDatabase(){
+        //получаем доступ к БД
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        //создаем список UserData
+        List<UserData> userDataList = new ArrayList<>();
+        //создаем курсор читаем данные из него,пока они там есть (цикл)
+        Cursor c = db.query(ContactsDbSchema.ContactsTable.DB_TABLE, null, null, null, null, null, null);
+        //читаем данные из него,пока они там есть (цикл)
+            if (c.moveToFirst()) {
+                // определяем номера столбцов по имени в выборке
+                int idColIndex = c.getColumnIndex("contact_id");
+                int nameColIndex = c.getColumnIndex("contact_name");
+                int phoneColIndex = c.getColumnIndex("contact_phone");
+                int selectColIndex = c.getColumnIndex("selected");
+                
+                do {
+                  //создаем обьект типа UserData  
+                  UserData userData = new UserData();
+                  //Заполняем его поля значениями из БД  
+                  userData.setContactID(c.getString(idColIndex));
+                  userData.setContactName(c.getString(nameColIndex));
+                  userData.setContactNumber(c.getString(phoneColIndex));
+                  userData.setContactSelect(c.getString(selectColIndex));   
+                  //кладем в список
+                  userDataList.add(userData);  
+                  
+                  // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
+                }
+                while (c.moveToNext());
+            } 
+            else Toast.makeText(this, "Ваша телефонная книга пуста!", Toast.LENGTH_SHORT).show();
+       c.close();
+       //возвращаем список с обьектами UserData 
+       return userDataList; 
+    }
+    
     
     //приемник локальных сообщений(транслируются только в нашем приложении)
     // принимает локальные ссобщения из UserDataAdapter
