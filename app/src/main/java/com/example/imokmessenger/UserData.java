@@ -25,7 +25,7 @@ public class UserData {
     }
     
     public String getContactID() {
-        return ContactName;
+        return ContactID;
     }
     
     public void setContactID(String contactID) {
