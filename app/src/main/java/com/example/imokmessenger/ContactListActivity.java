@@ -35,7 +35,9 @@ public class ContactListActivity extends AppCompatActivity {
     List<UserData> contactUserDataList;
     Button btnConfirm;
     SharedPreferences sPref;
-    UserDataSingleton userDataSingleton;
+    //UserDataSingleton userDataSingleton;
+    //переменная БД-хелпера
+    ContactsBaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +48,23 @@ public class ContactListActivity extends AppCompatActivity {
 
         btnConfirm = (Button) findViewById(R.id.button_confirm);
         btnConfirm.setEnabled(false);
-        userDataSingleton = UserDataSingleton.getInstance();
+        //инициируем БД-хелпер
+        dbHelper = new ContactsBaseHelper(this);
+        //userDataSingleton = UserDataSingleton.getInstance();
         getAllContacts();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
 
     private void getAllContacts() {
+        
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        
+        // создаем объект для данных
+        ContentValues cv = new ContentValues();
+        
         //обьект контакта
-        UserData userData;
+        //UserData userData;
         //создаем обьект contentResolver
         ContentResolver contentResolver = getContentResolver();
         //TODO попробовать другой алгоритм вытяжки данных из ContentProvider,этот долго работает
@@ -71,12 +81,17 @@ public class ContactListActivity extends AppCompatActivity {
                 if (hasPhoneNumber > 0) {
                     //...вычитываем значение ИД контакта
                     String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    //...и вычитываем значение имени контакта,все это сохраняем соответственно в String id и String name
+                    //записываем его в contentValues
+                    cv.put("contact_id", id);
+                    //затем вычитываем значение имени контакта
                     String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    //и тоже записываем его в contentValues
+                    cv.put("contact_name", name);
+                    
                     //создаем обьект Контакта
-                    userData = new UserData();
+                    //userData = new UserData();
                     //заполняем его поле "имя"
-                    userData.setContactName(name);
+                    //userData.setContactName(name);
                     //создаем курсор с запросом "вытянуть все из contentProvider-базы ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                     //где поле ContactsContract.CommonDataKinds.Phone.CONTACT_ID совпадает с введенным нами ИД
                     Cursor phoneCursor = contentResolver.query(
@@ -88,17 +103,25 @@ public class ContactListActivity extends AppCompatActivity {
                     //передвигаем парсер на первую позицию
                     if (phoneCursor.moveToNext()) {
                         //вычитываем значение телефонного номера контакта
-                        String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String phone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        //записываем телефонный номер в contentValues
+                        cv.put("contact_phone", phone);
                         //заполняем поле обьекта Контакт "телефонный номер"
-                        userData.setContactNumber(phoneNumber);
+                        //userData.setContactNumber(phoneNumber);
                     }
+                    //в колонку "выбрано" по умолчанию пишем 0,то есть не выбрано
+                    cv.put("selected", 0);
+                    //записываем строку в БД
+                    db.insert(ContactsDbSchema.ContactsTable.DB_TABLE, null, cv);
+                    
                     //закрываем phoneCursor
                     phoneCursor.close();
 
                     //поле "выбрано" по умолчанию ставим в "Не выбрано"
-                    userData.setSolved(false);
+                    //userData.setSolved(false);
+                    
                     //добавляем обьект в contactUserDataList
-                    userDataSingleton.getdataList().add(userData);
+                    //userDataSingleton.getdataList().add(userData);
                 }
             }
             //создаем обьект адаптера,ему передается ArrayList и обьект контекста
