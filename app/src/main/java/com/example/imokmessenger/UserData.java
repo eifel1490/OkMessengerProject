@@ -4,8 +4,11 @@ import java.util.List;
 
 public class UserData {
 
+    private String ContactID;
     private String ContactName;
     private String ContactNumber;
+    private String ContactSelect;
+    //TODO если что удалить
     private boolean mSolved;
     private List<UserData> list;
 
@@ -19,6 +22,14 @@ public class UserData {
 
     public void addToList(UserData userData){
         list.add(userData);
+    }
+    
+    public String getContactID() {
+        return ContactName;
+    }
+    
+    public void setContactID(String contactID) {
+        ContactID = contactID;
     }
 
     public String getContactName() {
@@ -36,6 +47,12 @@ public class UserData {
     public void setContactNumber(String contactNumber) {
         ContactNumber = contactNumber;
     }
+    
+    public void setContactSelect(String contactSel) {
+        ContactSelect = contactSel;
+    }
+    
+    
 
     public boolean isSolved() {
         return mSolved;
