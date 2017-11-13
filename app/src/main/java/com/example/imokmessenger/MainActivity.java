@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TAG = "myLog";
 
     Button chooseContacts, createMessageText, editData;
-    List<UserData> testList;
+    //List<UserData> testList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chooseContacts.setOnClickListener(this);
         createMessageText.setOnClickListener(this);
         editData.setOnClickListener(this);
-        testList = new UserData().getList();
+        //testList = new UserData().getList();
 
     }
 
