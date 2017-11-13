@@ -35,7 +35,7 @@ public class ContactListActivity extends AppCompatActivity {
     List<UserData> contactUserDataList;
     Button btnConfirm;
     SharedPreferences sPref;
-    //UserDataSingleton userDataSingleton;
+    
     //переменная БД-хелпера
     ContactsBaseHelper dbHelper;
 
@@ -50,7 +50,7 @@ public class ContactListActivity extends AppCompatActivity {
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
         dbHelper = new ContactsBaseHelper(this);
-        //userDataSingleton = UserDataSingleton.getInstance();
+        
         getAllContacts();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
@@ -63,8 +63,6 @@ public class ContactListActivity extends AppCompatActivity {
         // создаем объект для данных
         ContentValues cv = new ContentValues();
         
-        //обьект контакта
-        //UserData userData;
         //создаем обьект contentResolver
         ContentResolver contentResolver = getContentResolver();
         //TODO попробовать другой алгоритм вытяжки данных из ContentProvider,этот долго работает
@@ -87,11 +85,6 @@ public class ContactListActivity extends AppCompatActivity {
                     String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                     //и тоже записываем его в contentValues
                     cv.put("contact_name", name);
-                    
-                    //создаем обьект Контакта
-                    //userData = new UserData();
-                    //заполняем его поле "имя"
-                    //userData.setContactName(name);
                     //создаем курсор с запросом "вытянуть все из contentProvider-базы ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                     //где поле ContactsContract.CommonDataKinds.Phone.CONTACT_ID совпадает с введенным нами ИД
                     Cursor phoneCursor = contentResolver.query(
@@ -116,12 +109,6 @@ public class ContactListActivity extends AppCompatActivity {
                     
                     //закрываем phoneCursor
                     phoneCursor.close();
-
-                    //поле "выбрано" по умолчанию ставим в "Не выбрано"
-                    //userData.setSolved(false);
-                    
-                    //добавляем обьект в contactUserDataList
-                    //userDataSingleton.getdataList().add(userData);
                 }
             }
             //создаем обьект адаптера,ему передается ArrayList и обьект контекста
