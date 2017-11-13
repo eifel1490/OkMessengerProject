@@ -29,7 +29,6 @@ public class ContactListActivity extends AppCompatActivity {
 
     public static final String TAG = "myTag";
 
-
     //Recycleview
     RecyclerView rvContacts;
     List<UserData> contactUserDataList;
@@ -45,7 +44,6 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.all_contacts_activity);
         //инициализируем Recycleview
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-
         btnConfirm = (Button) findViewById(R.id.button_confirm);
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
@@ -118,8 +116,8 @@ public class ContactListActivity extends AppCompatActivity {
     
     //метод запускающий адаптер, на вход принимает список UserData
     public void adapterLauncher(){
-        List<UserData> list = getListFromDatabase();
-        //создаем обьект адаптера,ему передается ArrayList и обьект контекста
+            List<UserData> list = getListFromDatabase();
+            //создаем обьект адаптера,ему передается ArrayList и обьект контекста
             UserDataAdapter contactAdapter = new UserDataAdapter(list, getApplicationContext());
             //расположение будет вертикальным списком
             rvContacts.setLayoutManager(new LinearLayoutManager(this));
@@ -193,8 +191,8 @@ public class ContactListActivity extends AppCompatActivity {
     //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
     //и true если нажата хотя бы одна кнопка
     public boolean isListChecked(){
-        UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
-        List<UserData>l = userDataSingleton.getdataList();
+        //UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
+        List<UserData>l = getListFromDatabase();
         boolean result = false;
         for(int i=0;i<l.size();i++){
             if(l.get(i).isSolved()==true){
@@ -213,14 +211,7 @@ public class ContactListActivity extends AppCompatActivity {
         }
         else ContactPreferences.setStoredQuery(this,"listWithoutChecked");
 
-        //TEST
-        UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
-        List<UserData>l = userDataSingleton.getdataList();
-        for(int i=0;i<l.size();i++){
-                Log.d(TAG,l.get(i).getContactName()+" "+l.get(i).isSolved());
-            }
-
-
+       
         Intent intent = new Intent(this,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
