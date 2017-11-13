@@ -19,6 +19,8 @@ import java.util.List;
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ContactViewHolder>{
 
     public static final String TAG = "myLog";
+    //переменная БД-хелпера,сразу инициализируем
+    ContactsBaseHelper dbHelper = new ContactsBaseHelper(this);
 
     //список контактов
     private static List<UserData> userDataList;
@@ -63,6 +65,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
 
                 if(isChecked) {
                     userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
+                    //считываем значение ИД этого обьекта userData и передаем в метод addDataToDB(String contactId)
+                    addDataToDB(userDataList.get(holder.getAdapterPosition()).);
+                    //обновляем данные в БД по этому ИД
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "pressed");
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -84,6 +89,16 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     @Override
     public int getItemCount() {
         return userDataList.size();
+    }
+    
+    //метод,обновляющий запись в БД по ИД
+    public void addDataToDB(String contactId){
+        //получаем доступ к базе
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // создаем объект для данных
+        ContentValues cv = new ContentValues();
+        cv.put("selected", 1);
+        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, "id = ?",new String[] { contactId });
     }
 
     //
