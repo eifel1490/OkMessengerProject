@@ -8,7 +8,7 @@ public class ContactsDbSchema {
     
     public static final class Cols {
       //столбец ИД
-      public static final String UUID = "uuid";
+      public static final String ID = "contact_id";
       //столбец имя контакта
       public static final String NAME = "contact_name";
       //столбец номер контакта
@@ -22,7 +22,7 @@ public class ContactsDbSchema {
   //команда создания БД
   private static final String DB_CONTACTS_CREATE =
       "create table " + ContactsTable.DB_NAME + "(" + " _id integer primary key autoincrement, " +
-      ContactsTable.Cols.UUID + ", " +
+      ContactsTable.Cols.ID + ", " +
       ContactsTable.Cols.NAME + ", " +
       ContactsTable.Cols.PHONE + ", " +
       ContactsTable.Cols.SELECTED +
