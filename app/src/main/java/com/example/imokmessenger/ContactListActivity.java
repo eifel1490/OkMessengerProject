@@ -50,8 +50,9 @@ public class ContactListActivity extends AppCompatActivity {
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
         dbHelper = new ContactsBaseHelper(this);
-        
         getAllContacts();
+        adapterLauncher();
+        
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
@@ -59,6 +60,7 @@ public class ContactListActivity extends AppCompatActivity {
     //метод выбирает контакты из курсора contentResolver-а и пишет их построчно в БД
     private void getAllContacts() {
         
+        //получаем доступ к базе
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         
         // создаем объект для данных
@@ -107,7 +109,6 @@ public class ContactListActivity extends AppCompatActivity {
                     cv.put("selected", 0);
                     //записываем строку в БД
                     db.insert(ContactsDbSchema.ContactsTable.DB_TABLE, null, cv);
-                    
                     //закрываем phoneCursor
                     phoneCursor.close();
                 }
