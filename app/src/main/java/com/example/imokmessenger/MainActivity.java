@@ -1,6 +1,7 @@
 package com.example.imokmessenger;
 
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -17,7 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TAG = "myLog";
 
     Button chooseContacts, createMessageText, editData;
-    //List<UserData> testList;
+    //TODO TEST удалить
+    ContactsBaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +39,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chooseContacts.setOnClickListener(this);
         createMessageText.setOnClickListener(this);
         editData.setOnClickListener(this);
-        //testList = new UserData().getList();
+        //TODO TEST удалить
+        dbHelper = new ContactsBaseHelper(this);
 
     }
 
     //обработчик нажатия на кнопки
     @Override
     public void onClick(View v) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
             case R.id.btnSelectContacts:
                 Intent intentSelectContact = new Intent(this,ContactListActivity.class);
                 startActivity(intentSelectContact);
                 break;
             case R.id.btnSmsText:
-
+                //TODO TEST удалить
+                db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
 
                 break;
             case R.id.btnEdit:

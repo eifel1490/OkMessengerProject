@@ -1,7 +1,9 @@
 package com.example.imokmessenger;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,9 +20,9 @@ import java.util.List;
 
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ContactViewHolder>{
 
-    public static final String TAG = "myLog";
+    public static final String TAG = "myTag";
     //переменная БД-хелпера,сразу инициализируем
-    ContactsBaseHelper dbHelper = new ContactsBaseHelper(this);
+    ContactsBaseHelper dbHelper;
 
     //список контактов
     private static List<UserData> userDataList;
@@ -29,7 +31,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     //конструктор адаптера,на вход принимает список контактов и обьект контекста
     public UserDataAdapter(List<UserData> userDataList, Context mContext){
         this.userDataList = userDataList;
+        Log.d(TAG,String.valueOf("количество контактов в адаптере: "+ userDataList.size()));
         this.mContext = mContext;
+        dbHelper = new ContactsBaseHelper(mContext);
     }
 
     public static List<UserData> getList(){
@@ -66,7 +70,8 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
                 if(isChecked) {
                     userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
                     //считываем значение ИД этого обьекта userData и передаем в метод addDataToDB(String contactId)
-                    addDataToDB(userDataList.get(holder.getAdapterPosition()).);
+                    addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID());
+
                     //обновляем данные в БД по этому ИД
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "pressed");
@@ -88,17 +93,21 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     //метод возвращает размер листа
     @Override
     public int getItemCount() {
+        //return UserData.listAll(UserData.class).size();
         return userDataList.size();
     }
     
     //метод,обновляющий запись в БД по ИД
-    public void addDataToDB(String contactId){
+    public void addDataToDB(String contact_Id){
+        Log.d(TAG,"ID =" + contact_Id);
         //получаем доступ к базе
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         // создаем объект для данных
         ContentValues cv = new ContentValues();
-        cv.put("selected", 1);
-        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, "id = ?",new String[] { contactId });
+        cv.put("selected", "1");
+        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, "contact_id = ?",new String[] { contact_Id });
+
+
     }
 
     //

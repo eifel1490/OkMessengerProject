@@ -4,11 +4,13 @@ package com.example.imokmessenger;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.content.LocalBroadcastManager;
@@ -159,7 +161,8 @@ public class ContactListActivity extends AppCompatActivity {
             } 
             else Toast.makeText(this, "Ваша телефонная книга пуста!", Toast.LENGTH_SHORT).show();
        c.close();
-       //возвращаем список с обьектами UserData 
+       //возвращаем список с обьектами UserData
+        Log.d(TAG,"Количество контактов в ContactListActivity " + String.valueOf(userDataList.size()));
        return userDataList; 
     }
     
@@ -195,7 +198,7 @@ public class ContactListActivity extends AppCompatActivity {
         List<UserData>l = getListFromDatabase();
         boolean result = false;
         for(int i=0;i<l.size();i++){
-            if(l.get(i).isSolved()==true){
+            if(l.get(i).getContactSelect()=="1"){
                 result = true;
                 break;
             }

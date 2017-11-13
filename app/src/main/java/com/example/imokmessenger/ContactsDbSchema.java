@@ -1,4 +1,4 @@
-
+package com.example.imokmessenger;
 
 public class ContactsDbSchema {
   
@@ -20,8 +20,8 @@ public class ContactsDbSchema {
   }
   
   //команда создания БД
-  private static final String DB_CONTACTS_CREATE =
-      "create table " + ContactsTable.DB_NAME + "(" + " _id integer primary key autoincrement, " +
+  public static final String DB_CONTACTS_CREATE =
+      "create table " + ContactsTable.DB_TABLE + "(" + " _id integer primary key autoincrement, " +
       ContactsTable.Cols.ID + ", " +
       ContactsTable.Cols.NAME + ", " +
       ContactsTable.Cols.PHONE + ", " +

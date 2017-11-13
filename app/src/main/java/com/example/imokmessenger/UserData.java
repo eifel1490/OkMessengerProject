@@ -51,8 +51,10 @@ public class UserData {
     public void setContactSelect(String contactSel) {
         ContactSelect = contactSel;
     }
-    
-    
+
+    public String getContactSelect() {
+        return ContactSelect;
+    }
 
     public boolean isSolved() {
         return mSolved;
