@@ -4,7 +4,7 @@ public class ContactsDbSchema {
   
   public static final class ContactsTable {
     //название таблицы
-    public static final String NAME = "contacts";
+    public static final String DB_TABLE = "contacts";
     
     public static final class Cols {
       //столбец ИД
@@ -18,4 +18,16 @@ public class ContactsDbSchema {
     }
   
   }
+  
+  //команда создания БД
+  private static final String DB_CONTACTS_CREATE =
+      "create table " + ContactsTable.DB_NAME + "(" + " _id integer primary key autoincrement, " +
+      ContactsTable.Cols.UUID + ", " +
+      ContactsTable.Cols.NAME + ", " +
+      ContactsTable.Cols.PHONE + ", " +
+      ContactsTable.Cols.SELECTED +
+  ")";
+  
+  
+    
 }
