@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //обработчик нажатия на кнопки
     @Override
     public void onClick(View v) {
+        //TODO TEST удалить
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
             case R.id.btnSelectContacts:
