@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //определение кнопок
-        if(getValueFromPreference()==true) {
+        if(getValueFromPreference()) {
             chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
             chooseContacts.setEnabled(false);
         }
