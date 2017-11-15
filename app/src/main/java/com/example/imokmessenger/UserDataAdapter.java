@@ -105,7 +105,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         // создаем объект для данных
         ContentValues cv = new ContentValues();
         cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
-        db.update(ContacsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
+        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
     }
     
     

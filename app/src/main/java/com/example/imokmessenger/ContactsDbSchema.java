@@ -17,7 +17,7 @@ public class ContactsDbSchema {
         public static final String SELECTED = "selected";
       }
     }
-  }
+
   
   //команда создания БД
   public static final String DB_CONTACTS_CREATE =
