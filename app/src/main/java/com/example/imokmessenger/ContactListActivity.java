@@ -89,32 +89,32 @@ public class ContactListActivity extends AppCompatActivity {
                     //то кнопка Подтвердить становится активной
                     btnConfirm.setEnabled(true);
                 }
+                
                 //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
                 //и если ни одна не нажата,то кнопка Подтвердить неактивна
-                //if(isListChecked()==false){
-
-                //    btnConfirm.setEnabled(false);
-                //}
-            }
+                if(isPressed=="unpressed") {
+                    if(isListChecked()==false){
+                        //то кнопка Подтвердить становится неактивной
+                        btnConfirm.setEnabled(false);
+                    }    
+                }
+           }
         }
     };
 
+    //TODO написать метод
     //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
     //и true если нажата хотя бы одна кнопка
     /*public boolean isListChecked(){
-        //UserDataSingleton userDataSingleton = UserDataSingleton.getInstance();
-        List<UserData>l = getListFromDatabase();
         boolean result = false;
-        for(int i=0;i<l.size();i++){
-            if(l.get(i).getContactSelect()=="1"){
-                result = true;
-                break;
-            }
-        }
-        Log.d(TAG,"result "+ result);
+        //осуществляется чтение из БД ,где в методе query вытаскиваются только значения из колонки "выбрано"
+        //осуществляется просмотр все полученных записей,если хотя одна равна 1, то возвращаем true
+        //иначе возвращаем false
         return result;
     }*/
 
+    //TODO написать метод
+    //при нажатии на кнопку Подтвердить
     /*public void btnConfirmClick(View v) {
 
         if(isListChecked()==true) {
