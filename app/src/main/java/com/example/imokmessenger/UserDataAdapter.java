@@ -70,7 +70,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
                 if(isChecked) {
                     userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
                     //считываем значение ИД этого обьекта userData и передаем в метод addDataToDB(String contactId)
-                    addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID());
+                    addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID(),"1");
                     //обновляем данные в БД по этому ИД
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "pressed");
@@ -78,6 +78,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
                 }
                 else {
                     userDataList.get(holder.getAdapterPosition()).setSolved(false);
+                    addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID(),"0");
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "unpressed");
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -97,13 +98,13 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     }
     
     //метод,обновляющий запись в БД по ИД
-    public void addDataToDB(String contact_Id){
+    public void addDataToDB(String contact_Id, String index){
         Log.d(TAG,"ID =" + contact_Id);
         //получаем доступ к базе
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         // создаем объект для данных
         ContentValues cv = new ContentValues();
-        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, "1");
+        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
         db.update(ContacsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
     }
     
