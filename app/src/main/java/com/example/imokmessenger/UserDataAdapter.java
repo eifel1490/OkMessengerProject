@@ -71,7 +71,6 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
                     userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
                     //считываем значение ИД этого обьекта userData и передаем в метод addDataToDB(String contactId)
                     addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID());
-
                     //обновляем данные в БД по этому ИД
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "pressed");
@@ -104,11 +103,11 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         // создаем объект для данных
         ContentValues cv = new ContentValues();
-        cv.put("selected", "1");
-        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, "contact_id = ?",new String[] { contact_Id });
-
-
+        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, "1");
+        db.update(ContacsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
     }
+    
+    
 
     //
     public static class ContactViewHolder extends RecyclerView.ViewHolder{
