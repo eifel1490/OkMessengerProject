@@ -6,7 +6,7 @@
     tools:context=".ContactsMessageActivity" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editText_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/custom_message_edit_text"
         android:ems="10"
-        android:hint="Your favorite movie?" >
+        android:hint="Введите текст сообщения" >
 
         <requestFocus />
     </EditText>
@@ -23,27 +23,28 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
+        android:layout_alignLeft="@+id/editText_message"
+        android:layout_below="@+id/editText_message"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/button_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
             android:textColor="#f39c12"
-            android:text="Cancel" />
+            android:text="Отмена" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_save"
+            android:onClick="onClickSaveButton"
             android:layout_width="0dp"
             android:textColor="#FFF"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/corner_view"
-            android:text="OK" />
+            android:text="Сохранить" />
 
     </LinearLayout>
 
