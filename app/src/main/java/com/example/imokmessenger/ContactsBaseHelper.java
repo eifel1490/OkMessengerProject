@@ -19,6 +19,7 @@ public class ContactsBaseHelper extends SQLiteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase db) {
     db.execSQL(ContactsDbSchema.DB_CONTACTS_CREATE);
+    db.execSQL(ContactsDbSchema.DB_MESSAGE_CREATE);
   }
   
   //метод вызывается если БД обновляется

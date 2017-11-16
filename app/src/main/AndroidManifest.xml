@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactListActivity"/>
+        <activity android:name=".ContactListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ContactsMessageActivity" android:screenOrientation="portrait"/>
 
     </application>
 

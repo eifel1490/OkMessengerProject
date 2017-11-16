@@ -2,6 +2,8 @@ package com.example.imokmessenger;
 
 
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -23,7 +25,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import dmax.dialog.SpotsDialog;
 
 
 /*класс отображающий список конактов для пользователя*/
@@ -48,7 +50,7 @@ public class ContactListActivity extends AppCompatActivity {
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
         dbHelper = new ContactsBaseHelper(this);
-        new MyTask().execute();
+        new MyTask(this).execute();
         
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
@@ -113,6 +115,21 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {
+
+        private Context context;
+        private AlertDialog dialog;
+
+        public MyTask(Context context) {
+            this.context = context;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new SpotsDialog(context);
+            dialog.show();
+        }
 
         @Override
         protected List<UserData> doInBackground(Void... params) {
@@ -228,6 +245,7 @@ public class ContactListActivity extends AppCompatActivity {
             rvContacts.setLayoutManager(new LinearLayoutManager(getBaseContext()));
             //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
+            dialog.dismiss();
         }
     }
 

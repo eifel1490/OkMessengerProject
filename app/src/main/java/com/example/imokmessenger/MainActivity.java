@@ -55,11 +55,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intentSelectContact);
                 break;
             case R.id.btnSmsText:
-                //TODO TEST удалить
-                db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
+                Intent intentEditMessage = new Intent(this,ContactsMessageActivity.class);
+                startActivity(intentEditMessage);
 
                 break;
             case R.id.btnEdit:
+                //TODO TEST удалить
+                db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
                 chooseContacts.setEnabled(true);
 
         }
