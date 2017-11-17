@@ -34,6 +34,7 @@ public class ContactListActivity extends AppCompatActivity {
 
     //Recycleview
     RecyclerView rvContacts;
+    //кнопка "Подтвердить"
     Button btnConfirm;
 
     //переменная БД-хелпера
@@ -45,12 +46,14 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.all_contacts_activity);
         //инициализируем Recycleview
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+        //инициируем кнопку "Подтвердить"
         btnConfirm = (Button) findViewById(R.id.button_confirm);
+        //делаем кнопку неактивной
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
         dbHelper = new ContactsBaseHelper(this);
+        //запускаем в работу AsyncTask
         new MyTask(this).execute();
-        
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
     }
@@ -86,33 +89,43 @@ public class ContactListActivity extends AppCompatActivity {
     //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
     //и true если нажата хотя бы одна кнопка
     public boolean isListChecked(){
+        //результат по умолчанию false
         boolean result = false;
+        //открываем доступ к БД
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
+        //которые равны 1
         Cursor cursor = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
                 new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
+        //если курсор непустой,то значит есть минимум одно значение равное 1,тогде ставим результат true
         if(cursor.getCount()>0) result = true;
+        //закрываем курсор
         cursor.close();
-        //осуществляется чтение из БД ,где в методе query вытаскиваются только значения из колонки "выбрано"
-        //осуществляется просмотр все полученных записей,если хотя одна равна 1, то возвращаем true
-        //иначе возвращаем false
+        //возвращаем результат
         return result;
     }
 
 
     //при нажатии на кнопку Подтвердить
     public void btnConfirmClick(View v) {
-
+        //если isListChecked() вернул true
         if(isListChecked()) {
+            //то пишем в Преференс строку "listWithChecked" 
             ContactPreferences.setStoredQuery(this,"listWithChecked");
         }
+        //если isListChecked() вернул false, то пишем в Преференс строку "listWithoutChecked"
         else ContactPreferences.setStoredQuery(this,"listWithoutChecked");
-
+        //создаем интент на MainActivity
         Intent intent = new Intent(this,MainActivity.class);
+        //очищаем бэкстек
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //стартуем интент
         startActivity(intent);
+        //выходим из активити
         finish();
     }
 
+    //класс AsyncTask, выполняет операции в фоне
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {
 
         private Context context;
@@ -123,6 +136,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         }
 
+        //метод вызывается в начале работы AsyncTask
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -130,6 +144,8 @@ public class ContactListActivity extends AppCompatActivity {
             dialog.show();
         }
 
+        
+        //в этом методе происходит основная работа в фоне
         @Override
         protected List<UserData> doInBackground(Void... params) {
             //получаем доступ к базе
@@ -236,6 +252,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         }
 
+        //метод вызывается после основной работы в фоне.Имеет связь с UI
         @Override
         protected void onPostExecute(List<UserData>list) {
             super.onPostExecute(list);
@@ -244,6 +261,7 @@ public class ContactListActivity extends AppCompatActivity {
             rvContacts.setLayoutManager(new LinearLayoutManager(getBaseContext()));
             //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
+            //закрываем прогрессдиалог
             dialog.dismiss();
         }
     }
