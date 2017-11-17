@@ -30,6 +30,7 @@
         <Button
             android:id="@+id/button_cancel"
             android:layout_width="0dp"
+            android:onClick="onClickCancelButton"    
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
