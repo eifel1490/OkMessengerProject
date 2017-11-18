@@ -110,7 +110,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     
     
 
-    //
+
     public static class ContactViewHolder extends RecyclerView.ViewHolder{
 
         CheckBox tvCheckContact;

@@ -18,16 +18,6 @@ public class ContactsDbSchema {
       }
     }
 
-  public static final class ContactsMessage {
-
-    public static final String DB_MESSAGE_TABLE = "contacts";
-
-      public static final class Cols {
-        public static final String MESSAGE_TEXT = "message_text";
-      }
-  }
-
-  
   //команда создания таблицы контактов
   public static final String DB_CONTACTS_CREATE =
       "create table " + ContactsTable.DB_TABLE + "(" + " _id integer primary key autoincrement, " +
@@ -37,9 +27,6 @@ public class ContactsDbSchema {
       ContactsTable.Cols.SELECTED +
   ")";
 
-  //команда создания таблицы сообщения
-  public static final String DB_MESSAGE_CREATE =
-          "create table " + ContactsMessage.DB_MESSAGE_TABLE + "("
-                  + ContactsMessage.Cols.MESSAGE_TEXT + ")";
+
 
 }
