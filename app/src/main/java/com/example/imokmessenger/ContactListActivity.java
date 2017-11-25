@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import dmax.dialog.SpotsDialog;
 
+import static android.R.attr.start;
+
 
 /*класс отображающий список конактов для пользователя*/
 public class ContactListActivity extends AppCompatActivity {
@@ -36,7 +38,6 @@ public class ContactListActivity extends AppCompatActivity {
     RecyclerView rvContacts;
     //кнопка "Подтвердить"
     Button btnConfirm;
-
     //переменная БД-хелпера
     ContactsBaseHelper dbHelper;
 
@@ -125,6 +126,41 @@ public class ContactListActivity extends AppCompatActivity {
         finish();
     }
 
+    //TODO test start
+    public void displayContactsTest(){
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
+        //которые равны 1
+        Cursor c = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+                null,"selected = ?",new String[]{"1"},null,null,null);
+        try {
+
+            if (c.moveToFirst()) {
+                // определяем номера столбцов по имени в выборке
+                int idColIndex = c.getColumnIndex("contact_id");
+                int nameColIndex = c.getColumnIndex("contact_name");
+                int phoneColIndex = c.getColumnIndex("contact_phone");
+                int selectColIndex = c.getColumnIndex("selected");
+
+                do {
+                    Log.d(TAG,c.getString(idColIndex));
+                    Log.d(TAG,c.getString(nameColIndex));
+                    Log.d(TAG,c.getString(phoneColIndex));
+                    Log.d(TAG,c.getString(selectColIndex));
+                    // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
+                }
+                while (c.moveToNext());
+            }
+        }
+        finally {
+            if(c!=null) {
+                c.close();
+            }
+        }
+        c.close();
+    }
+    //TODO test finish
+
     //класс AsyncTask, выполняет операции в фоне
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {
 
@@ -193,7 +229,7 @@ public class ContactListActivity extends AppCompatActivity {
                                 //вычитываем значение телефонного номера контакта
                                 String phone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 //записываем телефонный номер в contentValues
-                                cv.put("contact_phone", phone);
+                                cv.put("contact_phone",phone.replaceAll("\\s+",""));
                                 //заполняем поле обьекта Контакт "телефонный номер"
                                 //userData.setContactNumber(phoneNumber);
                             }
@@ -214,6 +250,7 @@ public class ContactListActivity extends AppCompatActivity {
             }
 
             Cursor c = db.query(ContactsDbSchema.ContactsTable.DB_TABLE, null, null, null, null, null, null);
+
             //читаем данные из него,пока они там есть (цикл)
             try {
 

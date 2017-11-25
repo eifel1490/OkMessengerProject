@@ -31,7 +31,6 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     //конструктор адаптера,на вход принимает список контактов и обьект контекста
     public UserDataAdapter(List<UserData> userDataList, Context mContext){
         this.userDataList = userDataList;
-        Log.d(TAG,String.valueOf("количество контактов в адаптере: "+ userDataList.size()));
         this.mContext = mContext;
         dbHelper = new ContactsBaseHelper(mContext);
     }
@@ -87,8 +86,6 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
 
         });
     }
-
-
 
     //метод возвращает размер листа
     @Override

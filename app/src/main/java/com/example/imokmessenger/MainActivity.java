@@ -68,10 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     boolean getValueFromPreference() {
-
         String result = ContactPreferences.getStoredQuery(this);
         Log.d(TAG,"result = "+result);
-        if(result.equals("listWithChecked")){
+        if(result!=null){
             return true;
         }
         else return false;
