@@ -16,15 +16,15 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
 
     EditText editUserText;
     Button cancelMessage, saveMessage;
-    
+
     //переменная БД-хелпера
     ContactsBaseHelper dbHelper;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_message_activity);
-        
+
         editUserText = (EditText) findViewById(R.id.editText_message);
         cancelMessage = (Button) findViewById(R.id.button_cancel);
         saveMessage = (Button) findViewById(R.id.button_save);
@@ -46,7 +46,6 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
             case R.id.button_save :
                 String textMessage = editUserText.getText().toString();
                 if(textMessage.length()>0){
-                    //TODO реализация вытяжки из базы контактных номеров у которых
                     ContactPreferences.setStoredMessage(getBaseContext(),textMessage);
                     intent = ManageMessage.newIntent(this, textMessage);
                     startActivity(intent);

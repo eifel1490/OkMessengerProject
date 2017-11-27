@@ -73,16 +73,16 @@ public class ContactListActivity extends AppCompatActivity {
                     //то кнопка Подтвердить становится активной
                     btnConfirm.setEnabled(true);
                 }
-                
+
                 //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
                 //и если ни одна не нажата,то кнопка Подтвердить неактивна
                 if(isPressed=="unpressed") {
                     if(!isListChecked()){
                         //то кнопка Подтвердить становится неактивной
                         btnConfirm.setEnabled(false);
-                    }    
+                    }
                 }
-           }
+            }
         }
     };
 
@@ -111,7 +111,7 @@ public class ContactListActivity extends AppCompatActivity {
     public void btnConfirmClick(View v) {
         //если isListChecked() вернул true
         if(isListChecked()) {
-            //то пишем в Преференс строку "listWithChecked" 
+            //то пишем в Преференс строку "listWithChecked"
             ContactPreferences.setStoredQuery(this,"listWithChecked");
         }
         //если isListChecked() вернул false, то пишем в Преференс строку "listWithoutChecked"
@@ -180,7 +180,7 @@ public class ContactListActivity extends AppCompatActivity {
             dialog.show();
         }
 
-        
+
         //в этом методе происходит основная работа в фоне
         @Override
         protected List<UserData> doInBackground(Void... params) {
@@ -305,5 +305,3 @@ public class ContactListActivity extends AppCompatActivity {
 
 
 }
-
-

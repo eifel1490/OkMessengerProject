@@ -17,6 +17,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.ACTION_BATTERY_CHANGED;
 import static android.content.Intent.ACTION_BATTERY_LOW;
 
 /**
@@ -53,14 +54,13 @@ public class ManageMessage extends Activity{
         //инициализация ArrayList
         this.userDataList = new ArrayList<>();
         dbHelper = new ContactsBaseHelper(this);
-        sendMessageToContacts(fillListCheckedContacts());
+        //sendMessageToContacts(fillListCheckedContacts());
 
-        //LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter(ACTION_BATTERY_LOW));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter(ACTION_BATTERY_CHANGED));
 
         Intent intent = new Intent(getBaseContext(),MainActivity.class);
         startActivity(intent);
     }
-
 
     public void sendMessageToContacts(List<String>list){
         Log.d(TAG,"sendMessageToContacts");
@@ -101,18 +101,16 @@ public class ManageMessage extends Activity{
         return list;
     }
 
-    /*public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         //метод ресивер, отслеживает сообщения из BrodcastReceiver
         public void onReceive(Context context, Intent intent) {
             //если полученный интент соответствует системному значению ACTION_BATTERY_LOW
-            if(intent.getAction().equals(ACTION_BATTERY_LOW)) {
+            if(intent.getAction().equals(ACTION_BATTERY_CHANGED)) {
                 //настраиваем фильтр на прием системных сообщений ACTION_BATTERY_CHANGED (состояние зарядки смартфона)
                 IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
                 //создаем интент , которой регистрирует ресивер
                 Intent batteryStatus = context.registerReceiver(null, ifilter);
-
                 //текущий заряд батареи (рассчитывается от 0 до значения EXTRA_SCALE
                 int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
                 //целое число, содержащее максимальный уровень заряда батареи
@@ -121,13 +119,13 @@ public class ManageMessage extends Activity{
                 int percent = (level*100)/scale;
                 //если процент заряда меньше 10 и больше 5
                 //if (percent <= 10 && percent > 5) {
-                if (percent == 66) {
+                if (percent == 44) {
                     // Do Something
                     sendMessageToContacts(fillListCheckedContacts());
                 }
             }
         }
-    };*/
+    };
 
     //метод,отправляющий СМС контактам
     protected void sendSMSMessage(String contact, String message) {
@@ -139,7 +137,7 @@ public class ManageMessage extends Activity{
 
     @Override
     public void onDestroy() {
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
 

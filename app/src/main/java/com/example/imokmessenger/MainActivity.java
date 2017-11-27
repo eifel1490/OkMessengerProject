@@ -2,6 +2,8 @@ package com.example.imokmessenger;
 
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         //определение кнопок
         if(getValueFromPreference()) {
             chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
@@ -33,7 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
 
-        createMessageText = (Button) findViewById(R.id.btnSmsText);
+        if(getValueMessageFromPreference()) {
+            createMessageText = (Button) findViewById(R.id.btnSmsText);
+            createMessageText.setEnabled(false);
+        }
+        else
+            createMessageText = (Button) findViewById(R.id.btnSmsText);
+
         editData = (Button) findViewById(R.id.btnEdit);
         //назначаем кнопки слушателями
         chooseContacts.setOnClickListener(this);
@@ -62,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnEdit:
                 //TODO TEST удалить
                 db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
+                ContactPreferences.setStoredMessage(this,"");
                 chooseContacts.setEnabled(true);
+                createMessageText.setEnabled(true);
 
         }
     }
@@ -74,7 +84,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         else return false;
+    }
 
+    boolean getValueMessageFromPreference() {
+        String result = ContactPreferences.getStoredMessage(this);
+        Log.d(TAG,"result = "+result);
+        if(result.length()>0){
+            return true;
+        }
+        else return false;
     }
 
 }
