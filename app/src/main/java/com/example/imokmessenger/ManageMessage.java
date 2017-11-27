@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +56,28 @@ public class ManageMessage extends Activity{
         //инициализация ArrayList
         this.userDataList = new ArrayList<>();
         dbHelper = new ContactsBaseHelper(this);
+        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         //sendMessageToContacts(fillListCheckedContacts());
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter(ACTION_BATTERY_CHANGED));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter(ACTION_BATTERY_CHANGED));
 
         Intent intent = new Intent(getBaseContext(),MainActivity.class);
         startActivity(intent);
     }
+
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent i) {
+            //int level = i.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            //if(level==49){
+            //    sendMessageToContacts(fillListCheckedContacts());
+
+            //}
+            //если полученный интент соответствует системному значению ACTION_BATTERY_LOW
+
+
+        }
+    };
 
     public void sendMessageToContacts(List<String>list){
         Log.d(TAG,"sendMessageToContacts");
@@ -101,7 +118,7 @@ public class ManageMessage extends Activity{
         return list;
     }
 
-    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    /*public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         //метод ресивер, отслеживает сообщения из BrodcastReceiver
         public void onReceive(Context context, Intent intent) {
@@ -125,7 +142,7 @@ public class ManageMessage extends Activity{
                 }
             }
         }
-    };
+    };*/
 
     //метод,отправляющий СМС контактам
     protected void sendSMSMessage(String contact, String message) {
@@ -137,7 +154,7 @@ public class ManageMessage extends Activity{
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        unregisterReceiver(mBatInfoReceiver);
         super.onDestroy();
     }
 
