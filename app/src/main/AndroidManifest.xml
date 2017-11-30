@@ -21,7 +21,13 @@
         </activity>
         <activity android:name=".ContactListActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ContactsMessageActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ManageMessage"/>
+
+
+        <receiver android:name=".ManageMessage">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

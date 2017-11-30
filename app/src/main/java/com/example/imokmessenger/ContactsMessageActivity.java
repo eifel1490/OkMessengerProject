@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class ContactsMessageActivity extends Activity implements View.OnClickListener {
 
+
+
     EditText editUserText;
     Button cancelMessage, saveMessage;
 
@@ -47,10 +49,8 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
                 String textMessage = editUserText.getText().toString();
                 if(textMessage.length()>0){
                     ContactPreferences.setStoredMessage(getBaseContext(),textMessage);
-                    intent = ManageMessage.newIntent(this, textMessage);
+                    intent = new Intent(getBaseContext(),MainActivity.class);
                     startActivity(intent);
-                    //intent = new Intent(getBaseContext(),MainActivity.class);
-                    //startActivity(intent);
                 }
                 else Toast.makeText(getBaseContext(),"Введите текст сообщения",Toast.LENGTH_SHORT).show();
                 break;
