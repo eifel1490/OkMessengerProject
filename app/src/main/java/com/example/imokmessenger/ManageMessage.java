@@ -2,7 +2,6 @@ package com.example.imokmessenger;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,44 +9,68 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.annotation.Nullable;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.id.list;
-import static android.content.Intent.ACTION_BATTERY_CHANGED;
-import static android.content.Intent.ACTION_BATTERY_LOW;
 
-/**
- *
- */
+public class ManageMessage extends Activity {
 
-public class ManageMessage extends BroadcastReceiver{
+    private static final String EXTRA_MESSAGE = "extra_message";
+    public static final String TAG = "m";
 
-    public static final String TAG = "logManageMessage";
+    IntentFilter ifilter;
+    Intent batteryStatus;
+    String message;
 
-    //константа для работы с интентом
-    private static final String EXTRA_MESSAGE = "com.example.imokmessenger.message_id";
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        message = (String) getIntent().getSerializableExtra(EXTRA_MESSAGE);
+        ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryStatus = getBaseContext().registerReceiver(null, ifilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+        int percent = (level * 100) / scale;
+        Toast.makeText(this,String.valueOf(percent),Toast.LENGTH_LONG).show();
+        //если батарея не заряжается
+        if(!isChargeBattery(batteryStatus)){
+            //и если уровень заряда равен 59
+            if(percent==59){
+                Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+            }
+        }
 
-    //список контактов
-    public List<String> userDataList;
-    public String message;
-    //SQLiteDatabase sqLiteDatabase;
-    ContactsBaseHelper dbHelper;
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
 
-    public ManageMessage() {
+    }
+
+    //метод,который обрабатывает посланный себе же интент.Аналог конструктора
+    public static Intent newIntent(Context packageContext, String message) {
+        //достаем интент,отправленный нашему же классу
+        Intent intent = new Intent(packageContext,ManageMessage.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        //возвращаем интент
+        return intent;
+    }
+
+    public boolean isChargeBattery(Intent batteryStatus){
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
+        Toast.makeText(this,String.valueOf(isCharging),Toast.LENGTH_SHORT).show();
+        return isCharging;
     }
 
     //метод формирующий ArrayList из чекнутых контактов
-    public List<String> fillListCheckedContacts(){
+    public List<String> fillListCheckedContacts(Context context){
         Log.d(TAG,"fillListCheckedContacts");
         List<String> list = new ArrayList<>();
-
+        ContactsBaseHelper dbHelper = new ContactsBaseHelper(context);
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         Cursor c = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
                 null,"selected = ?",new String[]{"1"},null,null,null);
@@ -73,44 +96,55 @@ public class ManageMessage extends BroadcastReceiver{
         return list;
     }
 
-
-        @Override
-        //метод ресивер, отслеживает сообщения из BrodcastReceiver
-        public void onReceive(Context context, Intent intent) {
-            String message = ContactPreferences.getStoredMessage(context);
-
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            if(level==25) {
-                Toast.makeText(context,message,Toast.LENGTH_LONG).show();
-            }
-            //если полученный интент соответствует системному значению ACTION_BATTERY_LOW
-            /*if(intent.getAction().equals(ACTION_BATTERY_CHANGED)) {
-                //настраиваем фильтр на прием системных сообщений ACTION_BATTERY_CHANGED (состояние зарядки смартфона)
-                IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                //создаем интент , которой регистрирует ресивер
-                Intent batteryStatus = context.registerReceiver(null, ifilter);
-                //текущий заряд батареи (рассчитывается от 0 до значения EXTRA_SCALE
-                int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                //целое число, содержащее максимальный уровень заряда батареи
-                int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                //рассчитываем процент заряда батареи,который остался
-                int percent = (level*100)/scale;
-                //если процент заряда меньше 10 и больше 5
-                //if (percent <= 10 && percent > 5) {
-                if (percent == 21) {
-                    // Do Something
-                    //sendMessageToContacts(fillListCheckedContacts(),message);
-                    userDataList = fillListCheckedContacts();
-                    for(int i=0;i<userDataList.size();i++){
-                        //для каждого контакта вызываем метод sendSMSMessage
-                        PendingIntent pi = PendingIntent.getActivity(context, 0, new Intent(context,ManageMessage.class), 0);
-                        SmsManager sms = SmsManager.getDefault();
-                        sms.sendTextMessage(userDataList.get(i), null, message, pi, null);
-                    }
-
-                }*/
-            }
+    public void sendMessageToContacts(List<String>list,String message,Context context) {
+        Log.d(TAG, "sendMessageToContacts");
+        //проходим по листу
+        for (int i = 0; i < list.size(); i++) {
+            //для каждого контакта вызываем метод sendSMSMessage
+            sendSMSMessage(list.get(i), message,context);
         }
+    }
+
+
+    public void sendSMSMessage(String contact, String message,Context context) {
+            Log.d(TAG,"sendSMSMessage");
+            PendingIntent pi = PendingIntent.getActivity(context, 0, new Intent(context,ManageMessage.class), 0);
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(contact, null, message, pi, null);
+        }
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    /*public static final String TAG = "logManageMessage";
+
+    //константа для работы с интентом
+    private static final String EXTRA_MESSAGE = "com.example.imokmessenger.message_id";
+
+    //список контактов
+    public List<String> userDataList;
+    public String message;
+    //SQLiteDatabase sqLiteDatabase;
+    ContactsBaseHelper dbHelper;
+
+    public ManageMessage() {
+    }*/
+
+
+
+
+
 
 
     //метод,отправляющий СМС контактам
@@ -121,14 +155,8 @@ public class ManageMessage extends BroadcastReceiver{
         sms.sendTextMessage(contact, null, message, pi, null);
     }*/
 
-    //метод,который обрабатывает посланный себе же интент.Аналог конструктора
-    /*public static Intent newIntent(Context packageContext, String message) {
-        //достаем интент,отправленный нашему же классу
-        Intent intent = new Intent(packageContext,ManageMessage.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        //возвращаем интент
-        return intent;
-    }*/
+
+    /**/
 
     /*@Override
     protected void onCreate(Bundle savedInstanceState) {

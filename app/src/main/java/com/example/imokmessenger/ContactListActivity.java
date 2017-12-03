@@ -126,40 +126,7 @@ public class ContactListActivity extends AppCompatActivity {
         finish();
     }
 
-    //TODO test start
-    public void displayContactsTest(){
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
-        //которые равны 1
-        Cursor c = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                null,"selected = ?",new String[]{"1"},null,null,null);
-        try {
 
-            if (c.moveToFirst()) {
-                // определяем номера столбцов по имени в выборке
-                int idColIndex = c.getColumnIndex("contact_id");
-                int nameColIndex = c.getColumnIndex("contact_name");
-                int phoneColIndex = c.getColumnIndex("contact_phone");
-                int selectColIndex = c.getColumnIndex("selected");
-
-                do {
-                    Log.d(TAG,c.getString(idColIndex));
-                    Log.d(TAG,c.getString(nameColIndex));
-                    Log.d(TAG,c.getString(phoneColIndex));
-                    Log.d(TAG,c.getString(selectColIndex));
-                    // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
-                }
-                while (c.moveToNext());
-            }
-        }
-        finally {
-            if(c!=null) {
-                c.close();
-            }
-        }
-        c.close();
-    }
-    //TODO test finish
 
     //класс AsyncTask, выполняет операции в фоне
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {

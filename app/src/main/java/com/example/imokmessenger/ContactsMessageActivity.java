@@ -49,7 +49,8 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
                 String textMessage = editUserText.getText().toString();
                 if(textMessage.length()>0){
                     ContactPreferences.setStoredMessage(getBaseContext(),textMessage);
-                    intent = new Intent(getBaseContext(),MainActivity.class);
+                    intent = ManageMessage.newIntent(this,textMessage);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
                 else Toast.makeText(getBaseContext(),"Введите текст сообщения",Toast.LENGTH_SHORT).show();

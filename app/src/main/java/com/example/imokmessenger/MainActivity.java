@@ -1,8 +1,10 @@
 package com.example.imokmessenger;
 
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.BatteryManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
+
+import static android.R.attr.level;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
@@ -49,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editData.setOnClickListener(this);
         //TODO TEST удалить
         dbHelper = new ContactsBaseHelper(this);
-
     }
 
     //обработчик нажатия на кнопки
