@@ -125,6 +125,15 @@ public class ContactListActivity extends AppCompatActivity {
         //выходим из активити
         finish();
     }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //если контакты выбраны, и сообщение сохранено,вызываем сервис
+        if(ContactPreferences.getStoredQuery(this)!=null||ContactPreferences.getStoredMessage(this)!=null){
+            startService(new Intent(this, MessageService.class));
+        }
+    }
 
 
 
