@@ -46,7 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             createMessageText = (Button) findViewById(R.id.btnSmsText);
 
+        //если выбраны контакты или выбран текст то кнопка редактировать активна
+        if(getValueFromPreference()||getValueMessageFromPreference()){
+            editData = (Button) findViewById(R.id.btnEdit);
+        }
         editData = (Button) findViewById(R.id.btnEdit);
+        //по умолчанию кнопка неактивна
+        editData.setEnabled(false);
         //назначаем кнопки слушателями
         chooseContacts.setOnClickListener(this);
         createMessageText.setOnClickListener(this);
@@ -68,12 +74,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSmsText:
                 Intent intentEditMessage = new Intent(this,ContactsMessageActivity.class);
                 startActivity(intentEditMessage);
-
                 break;
             case R.id.btnEdit:
                 //TODO TEST удалить
-                db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
-                ContactPreferences.setStoredMessage(this,"");
+                //db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
+                //ContactPreferences.setStoredMessage(this,"");
                 chooseContacts.setEnabled(true);
                 createMessageText.setEnabled(true);
 
