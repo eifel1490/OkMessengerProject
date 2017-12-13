@@ -22,6 +22,7 @@
         <activity android:name=".ContactListActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ContactsMessageActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ManageMessage"/>
+        <service android:name=".MessageService"/>
     </application>
 
 </manifest>
