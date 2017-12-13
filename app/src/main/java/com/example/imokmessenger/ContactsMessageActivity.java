@@ -59,4 +59,13 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
             default: break;
         }
     }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //если контакты выбраны, и сообщение сохранено,вызываем сервис
+        if(ContactPreferences.getStoredQuery(this)!=null||ContactPreferences.getStoredMessage(this)!=null){
+            startService(new Intent(this, MessageService.class));
+        }
+    }
 }
