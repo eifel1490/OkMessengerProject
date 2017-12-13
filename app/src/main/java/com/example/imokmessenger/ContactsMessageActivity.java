@@ -43,6 +43,7 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
         switch (v.getId()){
             case R.id.button_cancel :
                 intent = new Intent(getBaseContext(),MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.button_save :
