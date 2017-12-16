@@ -6,7 +6,10 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.IBinder;
+import android.telephony.SmsManager;
 import android.util.Log;
+
+import static android.R.attr.level;
 
 
 public class YourService extends Service {
@@ -64,11 +67,24 @@ public class YourService extends Service {
 
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            //Log.d(TAG, "Battery charge level: " + (level / (float)scale));
-            Log.d(TAG, "Battery charge percent: " + (level * 100) / scale);
+            int percent = (level * 100) / scale;
+            boolean notSend = true;
+            Log.d(TAG, "Battery charge percent: " + percent);
+
+            while(percent==39&&notSend){
+                SmsManager smsManager= SmsManager.getDefault();
+                Log.d(TAG,"Sending message");
+                smsManager.sendTextMessage("+380965924585",null,"Battery percent: "+level+"%",null,null);
+                notSend=false;
+            }
+
 
             return null;
         }
+
+
+
+
 
         protected void onPostExecute(){
             YourService.this.stopSelf();
