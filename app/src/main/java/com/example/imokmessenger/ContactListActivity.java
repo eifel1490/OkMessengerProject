@@ -1,7 +1,5 @@
 package com.example.imokmessenger;
 
-
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -28,17 +26,13 @@ import dmax.dialog.SpotsDialog;
 
 import static android.R.attr.start;
 
-
 /*класс отображающий список конактов для пользователя*/
 public class ContactListActivity extends AppCompatActivity {
 
-    public static final String TAG = "myTag";
+    public static final String TAG = "ContactListActivity";
 
-    //Recycleview
     RecyclerView rvContacts;
-    //кнопка "Подтвердить"
     Button btnConfirm;
-    //переменная БД-хелпера
     ContactsBaseHelper dbHelper;
 
     @Override
@@ -106,9 +100,6 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
 
-
-
-
     //при нажатии на кнопку Подтвердить
     public void btnConfirmClick(View v) {
         //создаем интент на MainActivity
@@ -119,6 +110,17 @@ public class ContactListActivity extends AppCompatActivity {
         startActivity(intent);
         //выходим из активити
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(isListChecked()&&ContactPreferences.getStoredMessage(this).length()>0) {
+            Intent intent = new Intent(getApplicationContext(), YourService.class);
+            intent.putExtra(YourService.HANDLE_REBOOT, true);
+            Log.d(TAG, "onPause ContactListActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
+            startService(intent);
+        }
     }
     
 
@@ -140,7 +142,6 @@ public class ContactListActivity extends AppCompatActivity {
             dialog = new SpotsDialog(context);
             dialog.show();
         }
-
 
         //в этом методе происходит основная работа в фоне
         @Override

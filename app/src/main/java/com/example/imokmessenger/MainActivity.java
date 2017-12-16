@@ -67,19 +67,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //TODO TEST удалить
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
-                //если нажата кнопка "Выбрать контакты"
+            //если нажата кнопка "Выбрать контакты"
             case R.id.btnSelectContacts:
                 //то создается интент с перенаправлением на список контактов
                 Intent intentSelectContact = new Intent(this,ContactListActivity.class);
                 startActivity(intentSelectContact);
                 break;
-                //если нажата кнопка "Выбрать текст СМС"
+            //если нажата кнопка "Выбрать текст СМС"
             case R.id.btnSmsText:
                 //то создается интент с перенаправлением на страницу выбора сообщения
                 Intent intentEditMessage = new Intent(this,ContactsMessageActivity.class);
                 startActivity(intentEditMessage);
                 break;
-                //если нажата кнопка "Редактировать"
+            //если нажата кнопка "Редактировать"
             case R.id.btnEdit:
                 //TODO TEST удалить
                 int clearCount = db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean getValueMessageFromPreference() {
         String result = ContactPreferences.getStoredMessage(this);
 
-        if(result.length()>0){
+        if(result!=null&&result.length()>0){
             return true;
         }
         else return false;
