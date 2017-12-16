@@ -38,26 +38,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG,String.valueOf(isListChecked()));
         Log.d(TAG,String.valueOf(getValueMessageFromPreference()));
         //определение кнопок
+        chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
+        createMessageText = (Button) findViewById(R.id.btnSmsText);
+        editData = (Button) findViewById(R.id.btnEdit);
+
         if(isListChecked()) {
-            chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
             chooseContacts.setEnabled(false);
         }
-        else
-            chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
 
         if(getValueMessageFromPreference()) {
-            createMessageText = (Button) findViewById(R.id.btnSmsText);
             createMessageText.setEnabled(false);
         }
-        else
-            createMessageText = (Button) findViewById(R.id.btnSmsText);
 
         if(!getValueMessageFromPreference()&&!isListChecked()) {
-            editData = (Button) findViewById(R.id.btnEdit);
             editData.setEnabled(false);
         }
-        else
-            editData = (Button) findViewById(R.id.btnEdit);
 
         //назначаем кнопки слушателями
         chooseContacts.setOnClickListener(this);
