@@ -43,14 +43,14 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
         switch (v.getId()){
             case R.id.button_cancel :
                 intent = new Intent(getBaseContext(),MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.button_save :
                 String textMessage = editUserText.getText().toString();
                 if(textMessage.length()>0){
                     ContactPreferences.setStoredMessage(getBaseContext(),textMessage);
-                    intent = ManageMessage.newIntent(this,textMessage);
+                    intent = new Intent(getBaseContext(),MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }

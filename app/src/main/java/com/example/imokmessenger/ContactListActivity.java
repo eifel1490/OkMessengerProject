@@ -86,7 +86,6 @@ public class ContactListActivity extends AppCompatActivity {
         }
     };
 
-
     //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
     //и true если нажата хотя бы одна кнопка
     public boolean isListChecked(){
@@ -107,15 +106,11 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
 
+
+
+
     //при нажатии на кнопку Подтвердить
     public void btnConfirmClick(View v) {
-        //если isListChecked() вернул true
-        if(isListChecked()) {
-            //то пишем в Преференс строку "listWithChecked"
-            ContactPreferences.setStoredQuery(this,"listWithChecked");
-        }
-        //если isListChecked() вернул false, то пишем в Преференс строку "listWithoutChecked"
-        else ContactPreferences.setStoredQuery(this,"listWithoutChecked");
         //создаем интент на MainActivity
         Intent intent = new Intent(this,MainActivity.class);
         //очищаем бэкстек
@@ -126,16 +121,6 @@ public class ContactListActivity extends AppCompatActivity {
         finish();
     }
     
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //если контакты выбраны, и сообщение сохранено,вызываем сервис
-        if(ContactPreferences.getStoredQuery(this)!=null||ContactPreferences.getStoredMessage(this)!=null){
-            startService(new Intent(this, MessageService.class));
-        }
-    }
-
-
 
     //класс AsyncTask, выполняет операции в фоне
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {
@@ -259,8 +244,6 @@ public class ContactListActivity extends AppCompatActivity {
                 }
             }
 
-            //возвращаем список с обьектами UserData
-            Log.d(TAG,"Количество контактов в ContactListActivity " + String.valueOf(userDataList.size()));
             return userDataList;
 
         }
