@@ -80,7 +80,7 @@ public class YourService extends Service {
             Log.d(TAG, "Battery charge percent: " + percent);
             boolean flag = false;
 
-            while(percent==18){
+            while(percent==15){
                 if(!flag) {
                     sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
                     flag = true;
