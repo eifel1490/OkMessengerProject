@@ -102,6 +102,11 @@ public class DB {
         mDB.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
     }
 
+    public Cursor queryData(){
+        return mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+                null,"selected = ?",new String[]{"1"},null,null,null);
+    }
+
 
 
 

@@ -24,6 +24,7 @@ public class YourService extends Service {
     public static final String BATTERY_UPDATE = "battery_update";
     public static final String HANDLE_REBOOT = "first_start";
 
+
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Сервис создан");
@@ -79,14 +80,11 @@ public class YourService extends Service {
             Log.d(TAG, "Battery charge percent: " + percent);
             boolean flag = false;
 
-            while(percent==27){
+            while(percent==18){
                 if(!flag) {
                     sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
                     flag = true;
                 }
-
-
-
             }
             //if(percent>27||percent<27){
 
@@ -100,10 +98,9 @@ public class YourService extends Service {
         public List<String> fillListCheckedContacts(Context context){
             Log.d(TAG,"fillListCheckedContacts");
             List<String> list = new ArrayList<>();
-            ContactsBaseHelper dbHelper = new ContactsBaseHelper(context);
-            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-            Cursor c = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                    null,"selected = ?",new String[]{"1"},null,null,null);
+            DB db = new DB(context);
+            db.open();
+            Cursor c = db.queryData();
             try {
 
                 if (c.moveToFirst()) {
@@ -121,7 +118,7 @@ public class YourService extends Service {
                     c.close();
                 }
             }
-            sqLiteDatabase.close();
+            db.close();
             return list;
         }
 

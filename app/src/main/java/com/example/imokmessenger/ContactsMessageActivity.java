@@ -25,8 +25,6 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
     Button cancelMessage, saveMessage;
     DB db;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         db = new DB(this);
-        db.open();
+
         Log.d(TAG,String.valueOf(db.isListChecked()));
         Log.d(TAG,String.valueOf(getValueMessageFromPreference()));
         //определение кнопок
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //если нажата кнопка "Редактировать"
             case R.id.btnEdit:
                 //TODO TEST удалить
+                db.open();
                 db.deleteAllData();
                 db.close();
                 ContactPreferences.setStoredMessage(this,"");
