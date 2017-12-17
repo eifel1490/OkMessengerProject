@@ -115,7 +115,7 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(isListChecked()&&ContactPreferences.getStoredMessage(this).length()>0) {
+        if(isListChecked()&&ContactPreferences.getStoredMessage(this)!=null&&ContactPreferences.getStoredMessage(this).length()>0) {
             Intent intent = new Intent(getApplicationContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
             Log.d(TAG, "onPause ContactListActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));

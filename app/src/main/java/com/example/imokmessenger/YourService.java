@@ -1,13 +1,20 @@
 package com.example.imokmessenger;
 
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.attr.level;
 
@@ -68,22 +75,71 @@ public class YourService extends Service {
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             int percent = (level * 100) / scale;
-            boolean notSend = true;
-            Log.d(TAG, "Battery charge percent: " + percent);
 
-            while(percent==39&&notSend){
-                SmsManager smsManager= SmsManager.getDefault();
-                Log.d(TAG,"Sending message");
-                smsManager.sendTextMessage("+380965924585",null,"Battery percent: "+level+"%",null,null);
-                notSend=false;
+            Log.d(TAG, "Battery charge percent: " + percent);
+            boolean flag = false;
+
+            while(percent==27){
+                if(!flag) {
+                    sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                    flag = true;
+                }
+
+
+
             }
+            //if(percent>27||percent<27){
+
+            //}
 
 
             return null;
         }
 
+        //метод формирующий ArrayList из чекнутых контактов
+        public List<String> fillListCheckedContacts(Context context){
+            Log.d(TAG,"fillListCheckedContacts");
+            List<String> list = new ArrayList<>();
+            ContactsBaseHelper dbHelper = new ContactsBaseHelper(context);
+            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+            Cursor c = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+                    null,"selected = ?",new String[]{"1"},null,null,null);
+            try {
+
+                if (c.moveToFirst()) {
+                    int phoneColIndex = c.getColumnIndex("contact_phone");
+
+                    do {
+                        list.add(c.getString(phoneColIndex));
+                        // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
+                    }
+                    while (c.moveToNext());
+                }
+            }
+            finally {
+                if(c!=null) {
+                    c.close();
+                }
+            }
+            sqLiteDatabase.close();
+            return list;
+        }
+
+        public void sendMessageToContacts(List<String> list,Context context) {
+            String message = ContactPreferences.getStoredMessage(context);
+            Log.d(TAG, "sendMessageToContacts");
+            //проходим по листу
+            for (int i = 0; i < list.size(); i++) {
+                //для каждого контакта вызываем метод sendSMSMessage
+                sendSMSMessage(list.get(i), message);
+            }
+        }
 
 
+        public void sendSMSMessage(String contact,String message) {
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(contact, null, message, null, null);
+        }
 
 
         protected void onPostExecute(){
