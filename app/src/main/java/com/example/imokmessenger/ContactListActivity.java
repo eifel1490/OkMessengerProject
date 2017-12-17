@@ -33,7 +33,8 @@ public class ContactListActivity extends AppCompatActivity {
 
     RecyclerView rvContacts;
     Button btnConfirm;
-    ContactsBaseHelper dbHelper;
+    DB db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,9 @@ public class ContactListActivity extends AppCompatActivity {
         //делаем кнопку неактивной
         btnConfirm.setEnabled(false);
         //инициируем БД-хелпер
-        dbHelper = new ContactsBaseHelper(this);
+        // открываем подключение к БД
+        db = new DB(this);
+        db.open();
         //запускаем в работу AsyncTask
         new MyTask(this).execute();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
@@ -71,7 +74,7 @@ public class ContactListActivity extends AppCompatActivity {
                 //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
                 //и если ни одна не нажата,то кнопка Подтвердить неактивна
                 if(isPressed=="unpressed") {
-                    if(!isListChecked()){
+                    if(!db.isListChecked()){
                         //то кнопка Подтвердить становится неактивной
                         btnConfirm.setEnabled(false);
                     }
@@ -79,26 +82,6 @@ public class ContactListActivity extends AppCompatActivity {
             }
         }
     };
-
-    //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
-    //и true если нажата хотя бы одна кнопка
-    public boolean isListChecked(){
-        //результат по умолчанию false
-        boolean result = false;
-        //открываем доступ к БД
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
-        //которые равны 1
-        Cursor cursor = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
-        //если курсор непустой,то значит есть минимум одно значение равное 1,тогде ставим результат true
-        if(cursor.getCount()>0) result = true;
-        //закрываем курсор
-        cursor.close();
-        //возвращаем результат
-        return result;
-    }
-
 
     //при нажатии на кнопку Подтвердить
     public void btnConfirmClick(View v) {
@@ -115,7 +98,7 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(isListChecked()&&ContactPreferences.getStoredMessage(this)!=null&&ContactPreferences.getStoredMessage(this).length()>0) {
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(this)!=null&&ContactPreferences.getStoredMessage(this).length()>0) {
             Intent intent = new Intent(getApplicationContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
             Log.d(TAG, "onPause ContactListActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
@@ -129,6 +112,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         private Context context;
         private AlertDialog dialog;
+
 
         public MyTask(Context context) {
             this.context = context;
@@ -147,7 +131,7 @@ public class ContactListActivity extends AppCompatActivity {
         @Override
         protected List<UserData> doInBackground(Void... params) {
             //получаем доступ к базе
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            //SQLiteDatabase db = dbHelper.getWritableDatabase();
             List<UserData> userDataList = new ArrayList<>();
 
             // создаем объект для данных
@@ -198,7 +182,7 @@ public class ContactListActivity extends AppCompatActivity {
                             //в колонку "выбрано" по умолчанию пишем 0,то есть не выбрано
                             cv.put("selected", 0);
                             //записываем строку в БД
-                            db.insert(ContactsDbSchema.ContactsTable.DB_TABLE, null, cv);
+                            db.insert(cv);
                             //закрываем phoneCursor
                             phoneCursor.close();
                         }
@@ -211,7 +195,7 @@ public class ContactListActivity extends AppCompatActivity {
                 }
             }
 
-            Cursor c = db.query(ContactsDbSchema.ContactsTable.DB_TABLE, null, null, null, null, null, null);
+            Cursor c = db.getAllData();
 
             //читаем данные из него,пока они там есть (цикл)
             try {
@@ -242,6 +226,7 @@ public class ContactListActivity extends AppCompatActivity {
             finally {
                 if(c!=null) {
                     c.close();
+                    db.close();
                 }
             }
 

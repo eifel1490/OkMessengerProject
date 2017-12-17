@@ -21,8 +21,8 @@ import java.util.List;
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ContactViewHolder>{
 
     public static final String TAG = "myTag";
-    //переменная БД-хелпера,сразу инициализируем
-    ContactsBaseHelper dbHelper;
+    DB db;
+
 
     //список контактов
     private static List<UserData> userDataList;
@@ -32,7 +32,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     public UserDataAdapter(List<UserData> userDataList, Context mContext){
         this.userDataList = userDataList;
         this.mContext = mContext;
-        dbHelper = new ContactsBaseHelper(mContext);
+        db = new DB(mContext);
     }
 
     public static List<UserData> getList(){
@@ -97,13 +97,15 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     //метод,обновляющий запись в БД по ИД
     public void addDataToDB(String contact_Id, String index){
         Log.d(TAG,"ID =" + contact_Id);
-        //получаем доступ к базе
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.open();
         // создаем объект для данных
         ContentValues cv = new ContentValues();
         cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
-        db.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
+        db.updateData(cv,contact_Id);
+        db.close();
     }
+
+
     
     
 

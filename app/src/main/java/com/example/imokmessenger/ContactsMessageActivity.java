@@ -23,9 +23,9 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
 
     EditText editUserText;
     Button cancelMessage, saveMessage;
+    DB db;
 
-    //переменная БД-хелпера
-    ContactsBaseHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,8 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
         //назначаем кнопки слушателями
         cancelMessage.setOnClickListener(this);
         saveMessage.setOnClickListener(this);
-        dbHelper = new ContactsBaseHelper(this);
+        db = new DB(this);
+        db.open();
     }
 
     //реакция на нажатие
@@ -68,33 +69,14 @@ public class ContactsMessageActivity extends Activity implements View.OnClickLis
     @Override
     protected void onPause() {
         super.onPause();
-        if(isListChecked()&&ContactPreferences.getStoredMessage(this).length()>0) {
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(this).length()>0) {
 
             Intent intent = new Intent(getApplicationContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
             Log.d(TAG,"onPause ContactsMessageActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
+            db.close();
             startService(intent);
         }
     }
-
-    //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
-    //и true если нажата хотя бы одна кнопка
-    public boolean isListChecked(){
-        //результат по умолчанию false
-        boolean result = false;
-        //открываем доступ к БД
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
-        //которые равны 1
-        Cursor cursor = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
-        //если курсор непустой,то значит есть минимум одно значение равное 1,тогде ставим результат true
-        if(cursor.getCount()>0) result = true;
-        //закрываем курсор
-        cursor.close();
-        //возвращаем результат
-        return result;
-    }
-
 
 }

@@ -26,23 +26,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //кнопки
     Button chooseContacts, createMessageText, editData;
-    //TODO TEST удалить
-    ContactsBaseHelper dbHelper;
+    DB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        //TODO TEST удалить
-        dbHelper = new ContactsBaseHelper(this);
-        Log.d(TAG,String.valueOf(isListChecked()));
+        db = new DB(this);
+        db.open();
+        Log.d(TAG,String.valueOf(db.isListChecked()));
         Log.d(TAG,String.valueOf(getValueMessageFromPreference()));
         //определение кнопок
         chooseContacts = (Button) findViewById(R.id.btnSelectContacts);
         createMessageText = (Button) findViewById(R.id.btnSmsText);
         editData = (Button) findViewById(R.id.btnEdit);
 
-        if(isListChecked()) {
+        if(db.isListChecked()) {
             chooseContacts.setEnabled(false);
         }
 
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             createMessageText.setEnabled(false);
         }
 
-        if(!getValueMessageFromPreference()&&!isListChecked()) {
+        if(!getValueMessageFromPreference()&&!db.isListChecked()) {
             editData.setEnabled(false);
         }
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         //TODO TEST удалить
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
         switch (v.getId()) {
             //если нажата кнопка "Выбрать контакты"
             case R.id.btnSelectContacts:
@@ -82,33 +81,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //если нажата кнопка "Редактировать"
             case R.id.btnEdit:
                 //TODO TEST удалить
-                int clearCount = db.delete(ContactsDbSchema.ContactsTable.DB_TABLE,null,null);
-                Log.d(TAG, "deleted rows count = " + clearCount);
+                db.deleteAllData();
+                db.close();
                 ContactPreferences.setStoredMessage(this,"");
                 //то остальные кнопки делаются активными
                 chooseContacts.setEnabled(true);
                 createMessageText.setEnabled(true);
 
         }
-    }
-
-    //метод для проверки,есть ли нажатые кнопки.Возвращает false если ни одна кнопка не нажата
-    //и true если нажата хотя бы одна кнопка
-    public boolean isListChecked(){
-        //результат по умолчанию false
-        boolean result = false;
-        //открываем доступ к БД
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
-        //создаем курсор,в который идет выкачка инфо методом query.Query вытягивает из таблицы только те значения в столце "Выбрано"
-        //которые равны 1
-        Cursor cursor = sqLiteDatabase.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
-        //если курсор непустой,то значит есть минимум одно значение равное 1,тогде ставим результат true
-        if(cursor.getCount()>0) result = true;
-        //закрываем курсор
-        cursor.close();
-        //возвращаем результат
-        return result;
     }
 
     //метод, получающий значение,было ли записано сообщение
@@ -120,5 +100,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else return false;
     }
-
 }
