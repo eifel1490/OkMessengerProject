@@ -100,10 +100,15 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         db.open();
         // создаем объект для данных
         ContentValues cv = new ContentValues();
-        cv.put(DB.ContactsTable.Cols.SELECTED, index);
+        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
         db.updateData(cv,contact_Id);
         db.close();
     }
+
+
+    
+    
+
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder{
 
