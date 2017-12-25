@@ -59,6 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             Intent monitorIntent = new Intent(context, YourService.class);
             monitorIntent.putExtra(YourService.BATTERY_UPDATE, true);
             context.startService(monitorIntent);
+            
         }
     }
 }
