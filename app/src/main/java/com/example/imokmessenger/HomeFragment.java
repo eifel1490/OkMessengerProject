@@ -111,7 +111,6 @@ public class HomeFragment extends Fragment {
     //метод, получающий значение,было ли записано сообщение
     boolean getValueMessageFromPreference() {
         String result = ContactPreferences.getStoredMessage(getContext());
-        Log.d(TAG,result);
         if(result!=null&&result.length()>0){
             return true;
         }
