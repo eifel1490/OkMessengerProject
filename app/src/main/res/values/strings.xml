@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ImOkMessenger</string>
+       <string name="app_name">ImOkMessenger</string>
     <string name="select_contacts_for_dispatch">Выберите контакты для СМС</string>
     <string name="choose_text_for_sms">Выберите текст для СМС</string>
     <string name="edit_data">Редактировать данные</string>
@@ -8,6 +8,8 @@
     <string name="hint_text">Введите текст сообщения</string>
     <string name="message_text_intro">Пожалуйста,введите текст сообщения,которое будут получать выбранные
     Вами контакты</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
