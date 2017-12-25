@@ -78,18 +78,29 @@ public class YourService extends Service {
             int percent = (level * 100) / scale;
 
             Log.d(TAG, "Battery charge percent: " + percent);
-            boolean flag = false;
+            if(ContactPreferences.getStoredCharge(getBaseContext())!=null) {
+                boolean flag = false;
 
-            while(percent==15){
-                if(!flag) {
-                    sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
-                    flag = true;
+                while (percent == Integer.parseInt(ContactPreferences.getStoredCharge(getBaseContext()))) {
+                    Log.d(TAG, "stored value = " + ContactPreferences.getStoredCharge(getBaseContext()));
+                    if (!flag) {
+                        sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                        flag = true;
+                    }
+                }
+
+            }
+            else if (ContactPreferences.getStoredCharge(getBaseContext())==null){
+                boolean flag = false;
+
+                while (percent == 5) {
+                    Log.d(TAG, "stored value = null");
+                    if (!flag) {
+                        sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                        flag = true;
+                    }
                 }
             }
-            //if(percent>27||percent<27){
-
-            //}
-
 
             return null;
         }
