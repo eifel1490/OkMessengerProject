@@ -2,7 +2,9 @@ package com.example.imokmessenger;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,15 @@ public class BatteryLevelChangeFragment extends Fragment {
 
     EditText editChargeText;
     Button saveChargeMessage , cancelChargeMessage;
+
+    DB db;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        db = new DB(getContext());
+        db.open();
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -51,6 +62,19 @@ public class BatteryLevelChangeFragment extends Fragment {
         });
 
         return  v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
+                ContactPreferences.getStoredMessage(getContext()).length()>0) {
+
+            Intent intent = new Intent(getContext(), YourService.class);
+            intent.putExtra(YourService.HANDLE_REBOOT, true);
+            db.close();
+            getActivity().startService(intent);
+        }
     }
 
 }

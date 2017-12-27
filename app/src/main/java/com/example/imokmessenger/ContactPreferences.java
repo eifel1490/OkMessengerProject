@@ -10,7 +10,7 @@ public class ContactPreferences {
 
     //константа,было ли создано сообщение
     private static final String STORED_MESSAGE = "stored_message";
-    private static final String STORED_CHARGE = "stored_message";
+    private static final String STORED_CHARGE = "stored_charge";
 
     //метод,возвращающий индикатор,было ли создано сообщение
     public static String getStoredMessage(Context context){

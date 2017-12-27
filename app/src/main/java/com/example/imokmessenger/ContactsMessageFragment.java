@@ -116,7 +116,8 @@ public class ContactsMessageFragment extends Fragment  {
     @Override
     public void onPause() {
         super.onPause();
-        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext()).length()>0) {
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
+                ContactPreferences.getStoredMessage(getContext()).length()>0) {
 
             Intent intent = new Intent(getContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
