@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment {
         editData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG,"db is exist?"+String.valueOf(db!=null));
                 db.open();
                 db.deleteAllData();
                 db.close();
@@ -101,9 +102,6 @@ public class HomeFragment extends Fragment {
                 createMessageText.setEnabled(true);
             }
         });
-
-
-
 
         return v;
     }

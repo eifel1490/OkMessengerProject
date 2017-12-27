@@ -149,7 +149,7 @@ public class ContactListFragment extends Fragment {
             //получаем доступ к базе
             //SQLiteDatabase db = dbHelper.getWritableDatabase();
             List<UserData> userDataList = new ArrayList<>();
-
+            Log.d(TAG,"datalist is empty?"+String.valueOf(userDataList.isEmpty()));
             // создаем объект для данных
             ContentValues cv = new ContentValues();
 
