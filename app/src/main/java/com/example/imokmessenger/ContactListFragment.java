@@ -43,12 +43,10 @@ public class ContactListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new DB(getContext());
-        db.open();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        
         View v = inflater.inflate(R.layout.all_contacts_activity, container, false);
         //инициализируем Recycleview
         rvContacts = (RecyclerView) v.findViewById(R.id.rvContacts);
@@ -56,7 +54,7 @@ public class ContactListFragment extends Fragment {
         btnConfirm = (Button) v.findViewById(R.id.button_confirm);
         //делаем кнопку неактивной
         btnConfirm.setEnabled(false);
-
+        
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,8 +67,7 @@ public class ContactListFragment extends Fragment {
             }
         });
 
-        //запускаем в работу AsyncTask
-        new MyTask(getContext()).execute();
+        prepareToWork();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
 
@@ -107,7 +104,6 @@ public class ContactListFragment extends Fragment {
             }
         }
     };
-
 
 
     @Override
@@ -262,6 +258,13 @@ public class ContactListFragment extends Fragment {
             //закрываем прогрессдиалог
             dialog.dismiss();
         }
+    }
+    
+    public static void prepareToWork(){
+        db = new DB(getContext());
+        db.open();
+        //запускаем в работу AsyncTask
+        new MyTask(getContext()).execute();
     }
 
 
