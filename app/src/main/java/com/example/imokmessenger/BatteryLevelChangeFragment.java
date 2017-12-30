@@ -13,33 +13,49 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class BatteryLevelChangeFragment extends Fragment {
+public class BatteryLevelChangeFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
+
+    public static final String TAG = "BatteryLevelChangeFragment";
 
     EditText editChargeText;
-    Button saveChargeMessage , cancelChargeMessage;
-
+    Button saveChargeMessage , cancelChargeMessage, resetChargeButton;
+    String chargeBatteryLevel;
     DB db;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        db = new DB(getContext());
-        db.open();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((MainActivityND) getActivity()).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void doBack() {
+        goToHostActivity();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.battery_level_change, container, false);
+
+        db = new DB(getContext());
+        db.open();
+        chargeBatteryLevel = ContactPreferences.getStoredCharge(getContext());
+        Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
         editChargeText = (EditText) v.findViewById(R.id.editLevel_message);
+        if(chargeBatteryLevel!=null){
+            editChargeText.setText(String.valueOf(chargeBatteryLevel));
+        }
+
         saveChargeMessage = (Button) v.findViewById(R.id.button_save_charge);
         cancelChargeMessage = (Button) v.findViewById(R.id.button_cancel);
+        resetChargeButton = (Button) v.findViewById(R.id.button_reset);
 
         saveChargeMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String chargeLevel = editChargeText.getText().toString();
 
-                if(Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
+                if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
                     ContactPreferences.setStoredCharge(getContext(),chargeLevel);
                     Intent intent = new Intent(getContext(),MainActivityND.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -49,15 +65,21 @@ public class BatteryLevelChangeFragment extends Fragment {
             }
         });
 
+        resetChargeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
+                if(chargeBatteryLevel!=null){
+                    ContactPreferences.setStoredCharge(getContext(),"");
+                    editChargeText.setText(String.valueOf(""));
+                }
+            }
+        });
+
         cancelChargeMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //создаем интент на MainActivity
-                Intent intent = new Intent(getContext(),MainActivityND.class);
-                //очищаем бэкстек
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //стартуем интент
-                startActivity(intent);
+                goToHostActivity();
             }
         });
 
@@ -75,6 +97,15 @@ public class BatteryLevelChangeFragment extends Fragment {
             db.close();
             getActivity().startService(intent);
         }
+    }
+
+    public void goToHostActivity(){
+        //создаем интент на MainActivity
+        Intent intent = new Intent(getContext(),MainActivityND.class);
+        //очищаем бэкстек
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //стартуем интент
+        startActivity(intent);
     }
 
 }

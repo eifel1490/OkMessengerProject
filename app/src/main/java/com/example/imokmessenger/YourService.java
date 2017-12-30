@@ -64,6 +64,7 @@ public class YourService extends Service {
         @Override
         protected Void doInBackground(Void... arg0) {
             Log.d(TAG,"doInBackground");
+            String batteryChargeLevel = ContactPreferences.getStoredCharge(getBaseContext());
             //Battery State check - create log entries of current battery state
             IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
             Intent batteryStatus = YourService.this.registerReceiver(null, ifilter);
@@ -78,21 +79,22 @@ public class YourService extends Service {
             int percent = (level * 100) / scale;
 
             Log.d(TAG, "Battery charge percent: " + percent);
-            if(ContactPreferences.getStoredCharge(getBaseContext())!=null&&
-                    ContactPreferences.getStoredCharge(getBaseContext()).length()>0) {
-                Log.d(TAG, "stored value = " + ContactPreferences.getStoredCharge(getBaseContext()));
+            if(batteryChargeLevel!=null&&
+                    batteryChargeLevel.length()>0) {
+                Log.d(TAG, "stored value = " + batteryChargeLevel);
                 boolean flag = false;
 
-                while (percent == Integer.parseInt(ContactPreferences.getStoredCharge(getBaseContext()))) {
+                while (percent == Integer.parseInt(batteryChargeLevel)) {
 
                     if (!flag) {
                         sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                        Log.d(TAG,"Сообщение отправлено успешно");
                         flag = true;
                     }
                 }
 
             }
-            else if (ContactPreferences.getStoredCharge(getBaseContext())==null){
+            else if (batteryChargeLevel==null||batteryChargeLevel.length()==0){
                 Log.d(TAG, "stored value = null");
                 boolean flag = false;
 
@@ -100,6 +102,7 @@ public class YourService extends Service {
 
                     if (!flag) {
                         sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                        Log.d(TAG,"Сообщение отправлено успешно");
                         flag = true;
                     }
                 }
@@ -142,6 +145,7 @@ public class YourService extends Service {
             //проходим по листу
             for (int i = 0; i < list.size(); i++) {
                 //для каждого контакта вызываем метод sendSMSMessage
+                Log.d(TAG,"Сообщение отправлено :"+list.get(i));
                 sendSMSMessage(list.get(i), message);
             }
         }

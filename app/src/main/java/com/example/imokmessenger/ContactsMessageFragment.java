@@ -17,11 +17,7 @@ import android.widget.Toast;
 
 import static android.content.ContentValues.TAG;
 
-/**
- *
- */
-
-public class ContactsMessageFragment extends Fragment  {
+public class ContactsMessageFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
 
     private static final String TAG = "ContactsMessageActivity";
 
@@ -30,15 +26,21 @@ public class ContactsMessageFragment extends Fragment  {
     DB db;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        db = new DB(getContext());
-        db.open();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((MainActivityND) getActivity()).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void doBack() {
+        goToHostActivity();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.contacts_message_activity, container, false);
+        db = new DB(getContext());
+        db.open();
         editUserText = (EditText) v.findViewById(R.id.editText_message);
         saveMessage = (Button) v.findViewById(R.id.button_save);
 
@@ -61,12 +63,7 @@ public class ContactsMessageFragment extends Fragment  {
         cancelMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //создаем интент на MainActivity
-                Intent intent = new Intent(getContext(),MainActivityND.class);
-                //очищаем бэкстек
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //стартуем интент
-                startActivity(intent);
+                goToHostActivity();
             }
         });
 
@@ -74,45 +71,6 @@ public class ContactsMessageFragment extends Fragment  {
         return v;
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts_message_activity);
-
-        editUserText = (EditText) findViewById(R.id.editText_message);
-        cancelMessage = (Button) findViewById(R.id.button_cancel);
-        saveMessage = (Button) findViewById(R.id.button_save);
-
-        //назначаем кнопки слушателями
-        cancelMessage.setOnClickListener(this);
-        saveMessage.setOnClickListener(this);
-        db = new DB(this);
-        db.open();
-    }*/
-
-    //реакция на нажатие
-    /*@Override
-    public void onClick(View v) {
-        Intent intent;
-        switch (v.getId()){
-            case R.id.button_cancel :
-                intent = new Intent(getBaseContext(),MainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.button_save :
-                String textMessage = editUserText.getText().toString();
-                if(textMessage.length()>0){
-                    ContactPreferences.setStoredMessage(getBaseContext(),textMessage);
-                    intent = new Intent(getBaseContext(),HomeFragment.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-                else Toast.makeText(getBaseContext(),"Введите текст сообщения",Toast.LENGTH_SHORT).show();
-                break;
-            default: break;
-        }
-    }*/
-    
     @Override
     public void onPause() {
         super.onPause();
@@ -125,6 +83,15 @@ public class ContactsMessageFragment extends Fragment  {
             db.close();
             getActivity().startService(intent);
         }
+    }
+
+    public void goToHostActivity(){
+        //создаем интент на MainActivity
+        Intent intent = new Intent(getContext(),MainActivityND.class);
+        //очищаем бэкстек
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //стартуем интент
+        startActivity(intent);
     }
 
 }

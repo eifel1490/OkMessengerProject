@@ -32,7 +32,7 @@ import dmax.dialog.SpotsDialog;
 import static android.R.attr.start;
 
 /*класс отображающий список конактов для пользователя*/
-public class ContactListFragment extends Fragment {
+public class ContactListFragment extends Fragment implements MainActivityND.OnBackPressedListener {
 
     public static final String TAG = "ContactListActivity";
 
@@ -41,8 +41,14 @@ public class ContactListFragment extends Fragment {
     DB db;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((MainActivityND) getActivity()).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void doBack() {
+        goToHostActivity();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,12 +64,7 @@ public class ContactListFragment extends Fragment {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //создаем интент на MainActivity
-                Intent intent = new Intent(getContext(),MainActivityND.class);
-                //очищаем бэкстек
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //стартуем интент
-                startActivity(intent);
+                goToHostActivity();
             }
         });
 
@@ -260,11 +261,20 @@ public class ContactListFragment extends Fragment {
         }
     }
     
-    public static void prepareToWork(){
+    public void prepareToWork(){
         db = new DB(getContext());
         db.open();
         //запускаем в работу AsyncTask
         new MyTask(getContext()).execute();
+    }
+
+    public void goToHostActivity(){
+        //создаем интент на MainActivity
+        Intent intent = new Intent(getContext(),MainActivityND.class);
+        //очищаем бэкстек
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //стартуем интент
+        startActivity(intent);
     }
 
 

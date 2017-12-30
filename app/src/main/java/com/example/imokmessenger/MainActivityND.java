@@ -16,6 +16,19 @@ import android.widget.TextView;
 
 public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {
 
+
+    //обьект слушателя для нажатия кнопки Назад во фрагменте
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +72,11 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -87,5 +104,11 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        onBackPressedListener = null;
+        super.onDestroy();
     }
 }

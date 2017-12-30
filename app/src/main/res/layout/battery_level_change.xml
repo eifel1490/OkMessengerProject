@@ -27,10 +27,10 @@
         android:layout_below="@+id/editLevel_message"
         android:orientation="horizontal" >
 
+
         <Button
             android:id="@+id/button_cancel"
             android:layout_width="0dp"
-            android:onClick="onClickCancelButton"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
@@ -38,8 +38,16 @@
             android:text="Отмена" />
 
         <Button
+            android:id="@+id/button_reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:textColor="#f39c12"
+            android:text="Сбросить" />
+
+        <Button
             android:id="@+id/button_save_charge"
-            android:onClick="saveCharge"
             android:layout_width="0dp"
             android:textColor="#FFF"
             android:layout_height="wrap_content"
