@@ -19,7 +19,7 @@ import java.util.UUID;
 import static java.security.AccessController.getContext;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment  {
 
     public static final String TAG = "myLog";
 
@@ -27,6 +27,8 @@ public class HomeFragment extends Fragment {
     Button chooseContacts, createMessageText, editData;
     DB db;
     onSomeEventListener someEventListener;
+
+
 
     //интерфейс для взаимодействия с активити хостом MainActivityND
     public interface onSomeEventListener {
@@ -114,9 +116,5 @@ public class HomeFragment extends Fragment {
         }
         else return false;
     }
-
-
-
-
 
 }
