@@ -4,20 +4,20 @@
         <item
             android:id="@+id/home"
             android:icon="@android:drawable/ic_menu_call"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/chengeBatteryLevel"
             android:icon="@android:drawable/ic_menu_call"
-            android:title="Настроить уровень батареи" />
+            android:title="@string/set_battery_level" />
 
     </group>
 
-    <item android:title="Social">
+    <item android:title="@string/additionally">
         <menu>
             <item
                 android:id="@+id/fb"
                 android:icon="@drawable/youtube"
-                android:title="Faacebook" />
+                android:title="@string/share"/>
 
         </menu>
     </item>

@@ -16,8 +16,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.level;
-
 
 public class YourService extends Service {
     private static final String TAG = "YourService";

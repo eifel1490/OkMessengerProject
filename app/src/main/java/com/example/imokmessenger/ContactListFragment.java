@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import dmax.dialog.SpotsDialog;
 
-import static android.R.attr.start;
 
 /*класс отображающий список конактов для пользователя*/
 public class ContactListFragment extends Fragment implements MainActivityND.OnBackPressedListener {

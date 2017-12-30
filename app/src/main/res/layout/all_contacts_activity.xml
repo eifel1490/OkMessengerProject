@@ -10,7 +10,7 @@ android:layout_height="match_parent"
         android:id="@+id/info_for_user"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:background="@color/redColor"
         android:text="@string/text_for_info_for_user" />
@@ -26,7 +26,6 @@ android:layout_height="match_parent"
         android:id="@+id/button_confirm"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:onClick="btnConfirmClick"
         android:text="@string/text_for_button_confirm" />
 
     </LinearLayout>
