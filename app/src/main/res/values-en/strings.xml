@@ -26,6 +26,9 @@
     <string name="name">Имя</string>
     <string name="phone">Телефон</string>
     <string name="set_language">Язык</string>
+    <string name="set_Russian">Русский</string>
+    <string name="set_English">Английский</string>
+    <string name="set_Ukrainian">Украинский</string>
     
 </resources>
 
