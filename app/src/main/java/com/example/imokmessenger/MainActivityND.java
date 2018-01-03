@@ -88,11 +88,15 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         if (id == R.id.home) {
             showFragment(new HomeFragment());
         }
-        if(id == R.id.chengeBatteryLevel){
+        
+        if(id == R.id.changeBatteryLevel){
             showFragment(new BatteryLevelChangeFragment());
         }
-
-
+        
+        if(id == R.id.changeLanguage){
+            showFragment(new LanguageChangeFragment());
+        }
+        
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
