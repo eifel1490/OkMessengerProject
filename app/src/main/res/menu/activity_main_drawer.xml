@@ -6,12 +6,12 @@
             android:icon="@android:drawable/ic_menu_call"
             android:title="@string/home" />
         <item
-            android:id="@+id/chengeBatteryLevel"
+            android:id="@+id/changeBatteryLevel"
             android:icon="@android:drawable/ic_menu_call"
             android:title="@string/set_battery_level" />
         
         <item
-            android:id="@+id/chengeLanguageLevel"
+            android:id="@+id/changeLanguage"
             android:icon="@android:drawable/ic_menu_call"
             android:title="@string/set_language" />
 
