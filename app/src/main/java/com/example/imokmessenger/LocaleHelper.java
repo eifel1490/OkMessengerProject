@@ -1,3 +1,6 @@
+package com.example.imokmessenger;
+
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
