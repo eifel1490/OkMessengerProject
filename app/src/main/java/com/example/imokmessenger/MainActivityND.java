@@ -1,5 +1,6 @@
 package com.example.imokmessenger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -94,7 +95,8 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
         
         if(id == R.id.changeLanguage){
-            showFragment(new LanguageChangeFragment());
+            Intent intent= new Intent(this,LanguageChangeActivity.class);
+            startActivity(intent);
         }
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,34 +1,35 @@
 <resources>
     
-    <string name="app_name">ImOkMessenger</string>
-    <string name="select_contacts_for_dispatch">Выберите контакты для СМС</string>
-    <string name="choose_text_for_sms">Выберите текст для СМС</string>
-    <string name="edit_data">Редактировать данные</string>
-    <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС</string>
-    <string name="text_for_button_confirm">Подтвердить</string>
-    <string name="hint_text">Введите текст сообщения</string>
+    <string name="app_name">ImOkMessenger1</string>
+    <string name="select_contacts_for_dispatch">Выберите контакты для СМС1</string>
+    <string name="choose_text_for_sms">Выберите текст для СМС1</string>
+    <string name="edit_data">Редактировать данные1</string>
+    <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС1</string>
+    <string name="text_for_button_confirm">Подтвердить1</string>
+    <string name="hint_text">Введите текст сообщения1</string>
     <string name="message_text_intro">Пожалуйста,введите текст сообщения,которое будут получать выбранные
-    Вами контакты</string>
+    Вами контакты1</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="home">На главную</string>
-    <string name="set_battery_level">Настроить уровень батареи</string>
-    <string name="additionally">Дополнительно</string>
-    <string name="share">Поделится</string>
-    <string name="enter_the_charge_level">Ввести уровень заряда</string>
-    <string name="cancel">Отмена</string>
-    <string name="reset">Сбросить</string>
-    <string name="save">Сохранить</string>
-    <string name="enter_your_message">Введите текст сообщения</string>
-    <string name="content_desc">header image for navigation panel</string>
-    <string name="imok">Я ВПорядке</string>
+    <string name="home">На главную1</string>
+    <string name="set_battery_level">Настроить уровень батареи1</string>
+    <string name="additionally">Дополнительно1</string>
+    <string name="share">Поделится1</string>
+    <string name="enter_the_charge_level">Ввести уровень заряда1</string>
+    <string name="cancel">Отмена1</string>
+    <string name="reset">Сбросить1</string>
+    <string name="save">Сохранить1</string>
+    <string name="enter_your_message">Введите текст сообщения1</string>
+    <string name="content_desc">header image for navigation panel1</string>
+    <string name="imok">Я ВПорядке1</string>
     <string name="mail">maximturkin50@gmail.com</string>
-    <string name="name">Имя</string>
-    <string name="phone">Телефон</string>
-    <string name="set_language">Язык</string>
-    <string name="set_Russian">Русский</string>
-    <string name="set_English">Английский</string>
-    <string name="set_Ukrainian">Украинский</string>
+    <string name="name">Имя1</string>
+    <string name="phone">Телефон1</string>
+    <string name="set_language">Язык1</string>
+    <string name="set_Russian">Русский1</string>
+    <string name="set_English">Английский1</string>
+    <string name="set_Ukrainian">Украинский1</string>
+    <string name="cont_description">cont_description1</string>
     
 </resources>
 

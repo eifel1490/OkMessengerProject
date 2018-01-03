@@ -3,21 +3,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-            android:icon="@android:drawable/ic_menu_call"
+            android:icon="@drawable/home"
             android:title="@string/home" />
         <item
             android:id="@+id/changeBatteryLevel"
-            android:icon="@android:drawable/ic_menu_call"
+            android:icon="@drawable/battery_charge"
             android:title="@string/set_battery_level" />
-        
         <item
             android:id="@+id/changeLanguage"
-            android:icon="@android:drawable/ic_menu_call"
+            android:icon="@drawable/language"
             android:title="@string/set_language" />
 
 
     </group>
-
+    <!--
     <item android:title="@string/additionally">
         <menu>
             <item
@@ -26,6 +25,7 @@
                 android:title="@string/share"/>
 
         </menu>
-    </item>
+    </item> -->
+
 
 </menu>
