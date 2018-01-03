@@ -9,6 +9,12 @@
             android:id="@+id/chengeBatteryLevel"
             android:icon="@android:drawable/ic_menu_call"
             android:title="@string/set_battery_level" />
+        
+        <item
+            android:id="@+id/chengeLanguageLevel"
+            android:icon="@android:drawable/ic_menu_call"
+            android:title="@string/set_language" />
+
 
     </group>
 
