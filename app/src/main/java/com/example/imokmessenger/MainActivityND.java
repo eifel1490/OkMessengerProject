@@ -1,5 +1,6 @@
 package com.example.imokmessenger;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,13 +11,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebViewFragment;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {
+public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener,LanguageChangeFragment.onSomeLanguageListener {
 
+    private static final String TAG = "MainActivityND";
 
     //обьект слушателя для нажатия кнопки Назад во фрагменте
     protected OnBackPressedListener onBackPressedListener;
@@ -29,6 +34,17 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         this.onBackPressedListener = onBackPressedListener;
     }
 
+    @Override
+    public void someLanguageEvent(String s) {
+        Log.d(TAG,s);
+        if(s.equals("ru")){
+            updateViews("ru");
+        }
+        if(s.equals("en")){
+            updateViews("en");
+        }
+        else updateViews("ru");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +70,8 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     //метод интерфейса,обьявленного во фрагментах.Отлавливаем значения
@@ -95,8 +113,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
         
         if(id == R.id.changeLanguage){
-            Intent intent= new Intent(this,LanguageChangeActivity.class);
-            startActivity(intent);
+            showFragment(new LanguageChangeFragment());
         }
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,5 +135,15 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         super.onDestroy();
     }
 
-    
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    private void updateViews(String languageCode) {
+        Log.d(TAG,"updateViews is called");
+        LocaleHelper.setLocale(getApplication(), languageCode);
+        this.recreate();
+    }
+
 }

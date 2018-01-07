@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment  {
 
     //интерфейс для взаимодействия с активити хостом MainActivityND
     public interface onSomeEventListener {
-        public void someEvent(String s);
+        void someEvent(String s);
     }
 
     @Override

@@ -8,11 +8,15 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import java.util.Locale;
 
 
 
 public class LocaleHelper {
+
+    private static final String TAG = "LocaleHelper";
 
 	private static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
 
@@ -51,12 +55,14 @@ public class LocaleHelper {
 
 	//принимает контекст и строку "язык"
 	private static void persist(Context context, String language) {
-		//создает SharedPreferences
+        Log.d(TAG,"persist() called");
+        //создает SharedPreferences
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = preferences.edit();
                 //записывает в SharedPreferences язык
 		editor.putString(SELECTED_LANGUAGE, language);
 		editor.apply();
+
 	}
 
 	//в этом методе 
@@ -76,12 +82,15 @@ public class LocaleHelper {
 
 	@SuppressWarnings("deprecation")
 	private static Context updateResourcesLegacy(Context context, String language) {
+		Log.d(TAG,language);
 		Locale locale = new Locale(language);
+		Log.d(TAG,String.valueOf(locale==null));
 		Locale.setDefault(locale);
 
 		Resources resources = context.getResources();
 
 		Configuration configuration = resources.getConfiguration();
+		Log.d(TAG,String.valueOf(configuration==null));
 		configuration.locale = locale;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			configuration.setLayoutDirection(locale);
