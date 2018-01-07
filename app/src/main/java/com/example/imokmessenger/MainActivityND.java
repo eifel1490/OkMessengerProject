@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener,LanguageChangeFragment.onSomeLanguageListener {
+public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {
 
     private static final String TAG = "MainActivityND";
 
@@ -34,17 +34,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         this.onBackPressedListener = onBackPressedListener;
     }
 
-    @Override
-    public void someLanguageEvent(String s) {
-        Log.d(TAG,s);
-        if(s.equals("ru")){
-            updateViews("ru");
-        }
-        if(s.equals("en")){
-            updateViews("en");
-        }
-        else updateViews("ru");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +101,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
             showFragment(new BatteryLevelChangeFragment());
         }
         
-        if(id == R.id.changeLanguage){
-            showFragment(new LanguageChangeFragment());
-        }
-        
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -146,4 +131,26 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         this.recreate();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_russian:
+                updateViews("ru");
+                return true;
+
+            case R.id.menu_item_english:
+                updateViews("en");
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 }

@@ -9,10 +9,6 @@
             android:id="@+id/changeBatteryLevel"
             android:icon="@drawable/battery_charge"
             android:title="@string/set_battery_level" />
-        <item
-            android:id="@+id/changeLanguage"
-            android:icon="@drawable/language"
-            android:title="@string/set_language" />
 
 
     </group>
