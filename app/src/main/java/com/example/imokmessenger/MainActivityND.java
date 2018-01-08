@@ -128,7 +128,8 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
     private void updateViews(String languageCode) {
         Log.d(TAG,"updateViews is called");
         LocaleHelper.setLocale(getApplication(), languageCode);
-        this.recreate();
+        updateScreen();
+        //this.recreate();
     }
 
     @Override
@@ -152,5 +153,15 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    //для плавного обновления активити
+    public void updateScreen(){
+        Intent intent= new Intent(MainActivityND.this,MainActivityND.class);
+        finish();
+        //overridePendingTransition(0,0);
+        startActivity(getIntent());
+        //overridePendingTransition(0,0);
+
     }
 }
