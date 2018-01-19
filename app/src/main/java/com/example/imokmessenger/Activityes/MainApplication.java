@@ -1,4 +1,4 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Activityes;
 
 import android.app.Application;
 import android.content.Context;

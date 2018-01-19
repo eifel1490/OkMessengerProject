@@ -1,4 +1,4 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Activityes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,13 @@ import android.view.MenuItem;
 import android.webkit.WebViewFragment;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.imokmessenger.Fragments.BatteryLevelChangeFragment;
+import com.example.imokmessenger.Fragments.ContactListFragment;
+import com.example.imokmessenger.Fragments.ContactsMessageFragment;
+import com.example.imokmessenger.Fragments.HomeFragment;
+import com.example.imokmessenger.LocaleHelper;
+import com.example.imokmessenger.R;
 
 
 public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {

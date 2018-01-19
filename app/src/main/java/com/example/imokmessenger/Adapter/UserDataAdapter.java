@@ -1,9 +1,8 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.imokmessenger.DataBase.ContactsDbSchema;
+import com.example.imokmessenger.DataBase.DB;
+import com.example.imokmessenger.Model.UserData;
+import com.example.imokmessenger.R;
 
 import java.util.List;
 

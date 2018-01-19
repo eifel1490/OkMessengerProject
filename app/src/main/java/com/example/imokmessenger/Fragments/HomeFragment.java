@@ -1,22 +1,18 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
-import java.util.UUID;
-
-import static java.security.AccessController.getContext;
+import com.example.imokmessenger.DataBase.ContactPreferences;
+import com.example.imokmessenger.DataBase.DB;
+import com.example.imokmessenger.R;
 
 
 public class HomeFragment extends Fragment  {
@@ -102,6 +98,7 @@ public class HomeFragment extends Fragment  {
                 //то остальные кнопки делаются активными
                 chooseContacts.setEnabled(true);
                 createMessageText.setEnabled(true);
+                editData.setEnabled(false);
             }
         });
 

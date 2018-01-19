@@ -21,7 +21,7 @@
         </service>
 
 
-        <activity android:name=".MainActivityND">
+        <activity android:name=".Activityes.MainActivityND">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +29,6 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".LanguageChangeActivity"/>
 
         <!-- Receivers -->
         <receiver

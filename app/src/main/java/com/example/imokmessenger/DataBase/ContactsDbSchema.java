@@ -1,4 +1,4 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.DataBase;
 
 public class ContactsDbSchema {
   

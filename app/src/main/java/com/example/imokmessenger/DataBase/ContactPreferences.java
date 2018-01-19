@@ -1,4 +1,4 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.DataBase;
 
 import android.content.Context;
 import android.preference.PreferenceManager;

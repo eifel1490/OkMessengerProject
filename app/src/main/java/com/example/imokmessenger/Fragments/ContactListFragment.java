@@ -1,7 +1,6 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Fragments;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -9,15 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +20,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.imokmessenger.Activityes.MainActivityND;
+import com.example.imokmessenger.DataBase.ContactPreferences;
+import com.example.imokmessenger.DataBase.DB;
+import com.example.imokmessenger.R;
+import com.example.imokmessenger.Model.UserData;
+import com.example.imokmessenger.Adapter.UserDataAdapter;
+import com.example.imokmessenger.Test;
+import com.example.imokmessenger.YourService;
+
 import java.util.ArrayList;
 import java.util.List;
 import dmax.dialog.SpotsDialog;
@@ -34,6 +39,7 @@ import dmax.dialog.SpotsDialog;
 public class ContactListFragment extends Fragment implements MainActivityND.OnBackPressedListener {
 
     public static final String TAG = "ContactListActivity";
+
 
     RecyclerView rvContacts;
     Button btnConfirm;
@@ -63,6 +69,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Test.showContacts(getContext());
                 goToHostActivity();
             }
         });
@@ -110,14 +117,14 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public void onPause() {
         super.onPause();
 
-        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&ContactPreferences.getStoredMessage(getContext()).length()>0) {
+        if(db.isListChecked()&& ContactPreferences.getStoredMessage(getContext())!=null&&ContactPreferences.getStoredMessage(getContext()).length()>0) {
             Intent intent = new Intent(getContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
             Log.d(TAG, "onPause ContactListActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
             getActivity().startService(intent);
         }
     }
-    
+
 
     //класс AsyncTask, выполняет операции в фоне
     private class MyTask extends AsyncTask<Void, Void, List<UserData>> {

@@ -1,17 +1,18 @@
 package com.example.imokmessenger;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
+
+import com.example.imokmessenger.DataBase.ContactPreferences;
+import com.example.imokmessenger.DataBase.DB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,9 +155,5 @@ public class YourService extends Service {
             sms.sendTextMessage(contact, null, message, null, null);
         }
 
-
-        protected void onPostExecute(){
-            YourService.this.stopSelf();
-        }
     }
 }

@@ -1,8 +1,7 @@
-package com.example.imokmessenger;
+package com.example.imokmessenger.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,14 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.imokmessenger.Activityes.MainActivityND;
+import com.example.imokmessenger.DataBase.ContactPreferences;
+import com.example.imokmessenger.DataBase.DB;
+import com.example.imokmessenger.R;
+import com.example.imokmessenger.YourService;
 
-public class BatteryLevelChangeFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
+public class ContactsMessageFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
 
-    public static final String TAG = "BatteryLevelChangeFragment";
+    private static final String TAG = "ContactsMessageActivity";
 
-    EditText editChargeText;
-    Button saveChargeMessage , cancelChargeMessage, resetChargeButton;
-    String chargeBatteryLevel;
+    EditText editUserText;
+    Button cancelMessage, saveMessage;
     DB db;
 
     @Override
@@ -35,55 +38,37 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.battery_level_change, container, false);
-
+        View v = inflater.inflate(R.layout.contacts_message_activity, container, false);
         db = new DB(getContext());
         db.open();
-        chargeBatteryLevel = ContactPreferences.getStoredCharge(getContext());
-        Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
-        editChargeText = (EditText) v.findViewById(R.id.editLevel_message);
-        if(chargeBatteryLevel!=null){
-            editChargeText.setText(String.valueOf(chargeBatteryLevel));
-        }
+        editUserText = (EditText) v.findViewById(R.id.editText_message);
+        saveMessage = (Button) v.findViewById(R.id.button_save);
 
-        saveChargeMessage = (Button) v.findViewById(R.id.button_save_charge);
-        cancelChargeMessage = (Button) v.findViewById(R.id.button_cancel);
-        resetChargeButton = (Button) v.findViewById(R.id.button_reset);
-
-        saveChargeMessage.setOnClickListener(new View.OnClickListener() {
+        saveMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String chargeLevel = editChargeText.getText().toString();
-
-                if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
-                    ContactPreferences.setStoredCharge(getContext(),chargeLevel);
+                String textMessage = editUserText.getText().toString();
+                if(textMessage.length()>0){
+                    ContactPreferences.setStoredMessage(getContext(),textMessage);
                     Intent intent = new Intent(getContext(),MainActivityND.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
-                else Toast.makeText(getContext(),"Введите уровень батареи",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getContext(),"Введите текст сообщения",Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        resetChargeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
-                if(chargeBatteryLevel!=null){
-                    ContactPreferences.setStoredCharge(getContext(),"");
-                    editChargeText.setText(String.valueOf(""));
-                }
-            }
-        });
-
-        cancelChargeMessage.setOnClickListener(new View.OnClickListener() {
+        cancelMessage = (Button) v.findViewById(R.id.button_cancel);
+        cancelMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToHostActivity();
             }
         });
 
-        return  v;
+
+        return v;
     }
 
     @Override
@@ -94,6 +79,7 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
 
             Intent intent = new Intent(getContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
+            Log.d(TAG,"onPause ContactsMessageActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
             db.close();
             getActivity().startService(intent);
         }
