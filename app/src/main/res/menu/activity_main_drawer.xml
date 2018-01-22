@@ -9,8 +9,10 @@
             android:id="@+id/changeBatteryLevel"
             android:icon="@drawable/battery_charge"
             android:title="@string/set_battery_level" />
-
-
+        <item
+            android:id="@+id/rules"
+            android:icon="@drawable/rules"
+            android:title="@string/rules" />
     </group>
     <!--
     <item android:title="@string/additionally">

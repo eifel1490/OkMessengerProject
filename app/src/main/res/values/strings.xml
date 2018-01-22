@@ -27,7 +27,7 @@
     <string name="set_language">Язык</string>
     <string name="set_Russian">Русский</string>
     <string name="set_English">Английский</string>
-    <string name="set_Ukrainian">Украинский</string>
+    <string name="set_OK">ОК</string>
     <string name="cont_description">cont_description</string>
     <string name="app_description">Спасибо,что скачали приложение! Оно поможет уведомить друзей,что вы будете не на связи,
        так как ваш телефон скоро разрядится.Это просто-при достижении низкого уровня заряда телефон отправит специальное сообщение. Нажав
@@ -37,6 +37,8 @@
            в боковом меню.Если не указать свой уровень заряда,то сообщение будет отправлено автоматически при уровне заряда 3%.Приятного
            пользования.
         </string>
+
+    <string name="rules">Правила</string>
 
 
 

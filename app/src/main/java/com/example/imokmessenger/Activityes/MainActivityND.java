@@ -22,6 +22,7 @@ import com.example.imokmessenger.Fragments.BatteryLevelChangeFragment;
 import com.example.imokmessenger.Fragments.ContactListFragment;
 import com.example.imokmessenger.Fragments.ContactsMessageFragment;
 import com.example.imokmessenger.Fragments.HomeFragment;
+import com.example.imokmessenger.Fragments.UserRulesFragment;
 import com.example.imokmessenger.LocaleHelper;
 import com.example.imokmessenger.R;
 
@@ -106,6 +107,10 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         
         if(id == R.id.changeBatteryLevel){
             showFragment(new BatteryLevelChangeFragment());
+        }
+        
+        if(id == R.id.rules){
+            showFragment(new UserRulesFragment());
         }
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
