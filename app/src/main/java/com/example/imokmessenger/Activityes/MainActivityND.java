@@ -22,6 +22,7 @@ import com.example.imokmessenger.Fragments.BatteryLevelChangeFragment;
 import com.example.imokmessenger.Fragments.ContactListFragment;
 import com.example.imokmessenger.Fragments.ContactsMessageFragment;
 import com.example.imokmessenger.Fragments.HomeFragment;
+import com.example.imokmessenger.Fragments.UserRulesFragment;
 import com.example.imokmessenger.LocaleHelper;
 import com.example.imokmessenger.R;
 

@@ -27,8 +27,10 @@ import com.example.imokmessenger.DataBase.DB;
 import com.example.imokmessenger.R;
 import com.example.imokmessenger.Model.UserData;
 import com.example.imokmessenger.Adapter.UserDataAdapter;
-import com.example.imokmessenger.Test;
+
 import com.example.imokmessenger.YourService;
+
+import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +71,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Test.showContacts(getContext());
+
                 goToHostActivity();
             }
         });

@@ -1,3 +1,5 @@
+package com.example.imokmessenger.Fragments;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -5,17 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 
+import com.example.imokmessenger.Activityes.MainActivityND;
+import com.example.imokmessenger.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 
 public class UserRulesFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
 
     public static final String TAG = "UserRulesFragment";
 
-    @BindView(R.id.button_ok) Button text;
+    @BindView(R.id.ok_button) Button text;
     
     private Unbinder unbinder;
     
@@ -39,7 +46,7 @@ public class UserRulesFragment extends Fragment implements MainActivityND.OnBack
         return  v;
     }
 
-    @OnClick(R.id.button_ok)
+    @OnClick(R.id.ok_button)
     void onButtonOkClick() {
         goToHostActivity();
     }

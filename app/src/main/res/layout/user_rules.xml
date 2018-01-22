@@ -24,10 +24,11 @@
 
 
         <Button
-            android:id="@+id/button_ok"
+            android:id="@+id/ok_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:layout_weight="1"
             android:textColor="#f39c12"
             android:text="@string/set_OK" />
 
