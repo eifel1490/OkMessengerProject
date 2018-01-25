@@ -30,7 +30,8 @@ import com.example.imokmessenger.R;
 public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {
 
     private static final String TAG = "MainActivityND";
-
+    //константа для отправки во фрагмент
+    public static final String PARAMS = "params";
     //обьект слушателя для нажатия кнопки Назад во фрагменте
     protected OnBackPressedListener onBackPressedListener;
 
@@ -112,6 +113,18 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         if(id == R.id.rules){
             showFragment(new UserRulesFragment());
         }
+
+        if(id == R.id.edit_contacts){
+            //TODO кнопка контактов становится активной
+            passingValueToFrgment("1");
+        }
+
+        if(id == R.id.edit_message){
+            //TODO кнопка сообщений становится активной
+            passingValueToFrgment("2");
+        }
+
+
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -158,7 +171,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
                 return true;
 
             case R.id.menu_item_english:
-                updateViews("en");
+                //updateViews("en");
                 return true;
 
             default:
@@ -175,5 +188,14 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         startActivity(getIntent());
         //overridePendingTransition(0,0);
 
+    }
+
+    //для отпраки значения во фрагмент
+    public void passingValueToFrgment(String s){
+        Bundle bundle = new Bundle();
+        bundle.putString(PARAMS, s);
+
+        HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setArguments(bundle);
     }
 }
