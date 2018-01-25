@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.imokmessenger.Activityes.MainActivityND;
 import com.example.imokmessenger.DataBase.ContactPreferences;
 import com.example.imokmessenger.DataBase.DB;
 import com.example.imokmessenger.R;
@@ -52,23 +53,46 @@ public class HomeFragment extends Fragment  {
     @Nullable
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        String valueFromHostActivity = "";
         View v = inflater.inflate(R.layout.main_activity, container, false);
+        if(savedInstanceState!=null){
+            valueFromHostActivity = getArguments().getString(MainActivityND.PARAMS);
+        }
 
         chooseContacts = (Button) v.findViewById(R.id.btnSelectContacts);
         createMessageText = (Button) v.findViewById(R.id.btnSmsText);
-        editData = (Button) v.findViewById(R.id.btnEdit);
-        if(db.isListChecked()) {
+
+        //если контакты уже отмечены и нет признаков желания редактировать
+        if(db.isListChecked()&&!(valueFromHostActivity.equals("1"))) {
             chooseContacts.setEnabled(false);
         }
+        //если контакты не отмечены и есть желание редактировать
+        else chooseContacts.setEnabled(true);
 
-        if(getValueMessageFromPreference()) {
+        //если контакты уже отмечены и нет признаков желания редактировать
+        if(getValueMessageFromPreference()&&!(valueFromHostActivity.equals("2"))) {
             createMessageText.setEnabled(false);
         }
+        //если контакты не отмечены и есть желание редактировать
+        else createMessageText.setEnabled(true);
 
-        if(!getValueMessageFromPreference()&&!db.isListChecked()) {
-            editData.setEnabled(false);
-        }
+
+
+
+
+
+
+
+        //editData = (Button) v.findViewById(R.id.btnEdit);
+
+
+        //if(getValueMessageFromPreference()) {
+        //    createMessageText.setEnabled(false);
+        //}
+
+        //if(!getValueMessageFromPreference()&&!db.isListChecked()) {
+        //    editData.setEnabled(false);
+        //}
 
         chooseContacts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,20 +111,20 @@ public class HomeFragment extends Fragment  {
             }
         });
 
-        editData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG,"db is exist?"+String.valueOf(db!=null));
-                db.open();
-                db.deleteAllData();
-                db.close();
-                ContactPreferences.setStoredMessage(getContext(),"");
-                //то остальные кнопки делаются активными
-                chooseContacts.setEnabled(true);
-                createMessageText.setEnabled(true);
-                editData.setEnabled(false);
-            }
-        });
+        //editData.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+        //        Log.d(TAG,"db is exist?"+String.valueOf(db!=null));
+        //        db.open();
+        //        db.deleteAllData();
+        //        db.close();
+        //        ContactPreferences.setStoredMessage(getContext(),"");
+        //        //то остальные кнопки делаются активными
+        //        chooseContacts.setEnabled(true);
+        //        createMessageText.setEnabled(true);
+        //        editData.setEnabled(false);
+        //    }
+        //});
 
         return v;
     }

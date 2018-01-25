@@ -19,7 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     // вызовите это из своего сервиса
     public static void startAlarms(final Context context) {
-        Log.d(TAG,"startAlarms");
+        Log.d(TAG,"Режим оповещения включен");
         //получаем AlarmManager
         final AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //назначаем срабатывание сигнала(запуск относительно реального прошедшего времени,
@@ -33,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
      * метод возвращает PendingIntent
      */
     private static PendingIntent getAlarmIntent(final Context context) {
-        Log.d(TAG,"getAlarmIntent");
+        Log.d(TAG,"getAlarmIntent вызван.Он вызывается ежеминутно");
         //вкладываем интент,который будет вызывать AlarmReceiver
         /*Если система видит, что создаваемый с таким флагом PendingIntent похож на существующий,
          то она возьмет extra-данные Intent создаваемого PendingIntent и запишет их вместо extra-данных
@@ -45,20 +45,15 @@ public class AlarmReceiver extends BroadcastReceiver {
     //приемник слушатель
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (context == null) {
-            // Somehow you've lost your context; this really shouldn't happen
-            return;
-        }
-        if (intent == null){
-            // No intent was passed to your receiver; this also really shouldn't happen
-            return;
-        }
+        Log.d(TAG,"ресивером отловлено сообщение.Сейчас будет отправлен интент на сервис "+
+        "с параметром BATTERY_UPDATE");
         if (intent.getAction() == null) {
             // If you called your Receiver explicitly, this is what you should expect to happen
             //создаем интент на вызов сервиса
             Intent monitorIntent = new Intent(context, YourService.class);
             monitorIntent.putExtra(YourService.BATTERY_UPDATE, true);
             context.startService(monitorIntent);
+
             
         }
     }

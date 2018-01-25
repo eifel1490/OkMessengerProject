@@ -3,27 +3,28 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-            android:icon="@drawable/home"
+
             android:title="@string/home" />
         <item
             android:id="@+id/changeBatteryLevel"
-            android:icon="@drawable/battery_charge"
+
             android:title="@string/set_battery_level" />
         <item
             android:id="@+id/rules"
-            android:icon="@drawable/rules"
+
             android:title="@string/rules" />
     </group>
-    <!--
-    <item android:title="@string/additionally">
-        <menu>
-            <item
-                android:id="@+id/fb"
-                android:icon="@drawable/youtube"
-                android:title="@string/share"/>
 
-        </menu>
-    </item> -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/edit_contacts"
+            android:title="@string/edit_contacts" />
+        <item
+            android:id="@+id/edit_message"
+            android:title="@string/edit_messages" />
+    </group>
+
+
 
 
 </menu>
