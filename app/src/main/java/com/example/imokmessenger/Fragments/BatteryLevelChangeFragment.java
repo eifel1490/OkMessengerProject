@@ -70,6 +70,7 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
 
         if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
             ContactPreferences.setStoredCharge(getContext(),chargeLevel);
+            prepareToServiseStart();
             Intent intent = new Intent(getContext(),MainActivityND.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -94,14 +95,7 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
     @Override
     public void onPause() {
         super.onPause();
-        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
-                ContactPreferences.getStoredMessage(getContext()).length()>0) {
-
-            Intent intent = new Intent(getContext(), YourService.class);
-            intent.putExtra(YourService.HANDLE_REBOOT, true);
-            db.close();
-            getActivity().startService(intent);
-        }
+        prepareToServiseStart();
     }
 
     public void goToHostActivity(){
@@ -118,6 +112,17 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+    
+    public void prepareToServiseStart(){
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
+                ContactPreferences.getStoredMessage(getContext()).length()>0) {
+
+            Intent intent = new Intent(getContext(), YourService.class);
+            intent.putExtra(YourService.HANDLE_REBOOT, true);
+            db.close();
+            getActivity().startService(intent);
+        }
     }
 
 }
