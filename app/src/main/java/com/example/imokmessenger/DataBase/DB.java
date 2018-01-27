@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.imokmessenger.DataBase.ContactsDbSchema;
+import com.example.imokmessenger.Model.UserData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Класс базы данных
@@ -87,6 +91,30 @@ public class DB {
         cursor.close();
         //возвращаем результат
         return result;
+    }
+
+    //возвращает список чекнутых контактов для инфо на главной странице
+    public List<String> getCheckedContacts(){
+        List<String>list= new ArrayList<>();
+        Cursor c = mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+                new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
+        try {
+
+            if (c.moveToFirst()) {
+                // определяем номера столбцов по имени в выборке
+                int nameColIndex = c.getColumnIndex("contact_name");
+                do {
+                    list.add(c.getString(nameColIndex));
+                }
+                while (c.moveToNext());
+            }
+        }
+        finally {
+            if(c!=null) {
+                c.close();
+            }
+        }
+        return list;
     }
 
     //вставка в БД

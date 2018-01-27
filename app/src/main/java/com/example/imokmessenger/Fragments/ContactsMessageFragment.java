@@ -3,6 +3,8 @@ package com.example.imokmessenger.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
     EditText editUserText;
     Button cancelMessage, saveMessage;
     DB db;
+    String textMessage;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
 
     @Override
     public void doBack() {
+        prepareToStartServise();
         goToHostActivity();
     }
 
@@ -43,13 +47,33 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
         db.open();
         editUserText = (EditText) v.findViewById(R.id.editText_message);
         saveMessage = (Button) v.findViewById(R.id.button_save);
+        saveMessage.setEnabled(false);
+        editUserText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textMessage = s.toString();
+                saveMessage.setEnabled(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         saveMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String textMessage = editUserText.getText().toString();
+                ContactPreferences.setStoredMessage(getContext(),"");
                 if(textMessage.length()>0){
                     ContactPreferences.setStoredMessage(getContext(),textMessage);
+                    prepareToStartServise();
                     Intent intent = new Intent(getContext(),MainActivityND.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -74,15 +98,7 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
     @Override
     public void onPause() {
         super.onPause();
-        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
-                ContactPreferences.getStoredMessage(getContext()).length()>0) {
-
-            Intent intent = new Intent(getContext(), YourService.class);
-            intent.putExtra(YourService.HANDLE_REBOOT, true);
-            Log.d(TAG,"onPause ContactsMessageActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
-            db.close();
-            getActivity().startService(intent);
-        }
+        prepareToStartServise();
     }
 
     public void goToHostActivity(){
@@ -92,6 +108,18 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         //стартуем интент
         startActivity(intent);
+    }
+
+    public void prepareToStartServise(){
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
+                ContactPreferences.getStoredMessage(getContext()).length()>0) {
+
+            Intent intent = new Intent(getContext(), YourService.class);
+            intent.putExtra(YourService.HANDLE_REBOOT, true);
+            Log.d(TAG,"onPause ContactsMessageActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
+            db.close();
+            getActivity().startService(intent);
+        }
     }
 
 }
