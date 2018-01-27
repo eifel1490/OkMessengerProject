@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ImOkMessenger</string>
+    <string name="select_contacts_for_dispatch">Выберите контакты для СМС</string>
+    <string name="choose_text_for_sms">Выберите текст для СМС</string>
+    <string name="edit_data">Редактировать данные</string>
+    <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС</string>
+    <string name="text_for_button_confirm">Подтвердить</string>
+    <string name="hint_text">Введите текст сообщения</string>
+    <string name="message_text_intro">Пожалуйста,введите текст сообщения,которое будут получать выбранные
+    Вами контакты</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">На главную</string>
+    <string name="set_battery_level">Настроить уровень батареи</string>
+    <string name="additionally">Дополнительно</string>
+    <string name="share">Поделится</string>
+    <string name="enter_the_charge_level">Ввести уровень заряда</string>
+    <string name="cancel">Отмена</string>
+    <string name="reset">Сбросить</string>
+    <string name="save">Сохранить</string>
+    <string name="enter_your_message">Введите текст сообщения</string>
+    <string name="content_desc">header image for navigation panel</string>
+    <string name="imok">Я ВПорядке</string>
+    <string name="mail">maximturkin50@gmail.com</string>
+    <string name="name">Имя</string>
+    <string name="phone">Телефон</string>
+    <string name="set_language">Язык</string>
+    <string name="set_Russian">Русский</string>
+    <string name="set_English">Английский</string>
+    <string name="set_OK">ОК</string>
+    <string name="cont_description">cont_description</string>
+    <string name="app_description">Спасибо,что скачали приложение! Оно поможет уведомить друзей,что вы будете не на связи,
+       так как ваш телефон скоро разрядится.Это просто-при достижении низкого уровня заряда телефон отправит специальное сообщение. Нажав
+       кнопку "Выбрать контакты", вы можете отметить людей,которым будет отсылаться это сообщение.Нажав "Выбрать текст", вы сможете
+           установить текст сообщения.Кнопка "Редактировать" нужна для исправления списка рассылки или изменения текста.Кроме того,
+     вы можете самостоятельно указать уровень заряда,при котором будет рассылаться сообщение,выбрав кнопку "Настроить уровень батареи"
+           в боковом меню.Если не указать свой уровень заряда,то сообщение будет отправлено автоматически при уровне заряда 3%.Приятного
+           пользования.
+        </string>
+
+    <string name="rules">Правила</string>
+    <string name="edit_contacts">Редактировать контакты</string>
+    <string name="edit_messages">Редактировать сообщение</string>
+    <string name="about_version">О версии</string>
+
+
+
+
+
+
+
+
+
+
+</resources>

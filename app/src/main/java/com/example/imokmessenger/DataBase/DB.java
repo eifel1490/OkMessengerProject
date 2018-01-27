@@ -5,14 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.imokmessenger.DataBase.ContactsDbSchema;
+import com.example.imokmessenger.Model.UserData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Класс базы данных
  */
 
 public class DB {
+
+    private static final String TAG = "databaselog";
 
     //версия БД
     private static final int VERSION = 1;
@@ -87,6 +94,33 @@ public class DB {
         cursor.close();
         //возвращаем результат
         return result;
+    }
+
+    //возвращает список чекнутых контактов для инфо на главной странице
+    public List<String> getCheckedContacts(){
+        List<String>list= new ArrayList<>();
+        Cursor c = mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+                new String[]{ContactsDbSchema.ContactsTable.Cols.NAME},"selected = ?",new String[]{"1"},null,null,null);
+        if(c!=null) {
+            try {
+
+                if (c.moveToFirst()) {
+                    // определяем номера столбцов по имени в выборке
+                    int nameColIndex = c.getColumnIndex("contact_name");
+                    do {
+                        Log.d(TAG, c.getString(nameColIndex));
+                        list.add(c.getString(nameColIndex));
+                    }
+                    while (c.moveToNext());
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
+
+        }
+        return list;
     }
 
     //вставка в БД

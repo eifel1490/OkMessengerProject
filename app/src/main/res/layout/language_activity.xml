@@ -37,15 +37,7 @@
             android:layout_margin="10dp"
             android:text="@string/set_English"/>
             
-        <Button
-            android:id="@+id/btnSelectUkrainian"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_twitter_gb"
-            android:padding="10dp"
-            style="@style/ButtonText"
-            android:layout_margin="10dp"
-            android:text="@string/set_Ukrainian"/>
+
 
 
     </LinearLayout>

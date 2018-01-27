@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
@@ -61,20 +62,20 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         
         View v = inflater.inflate(R.layout.all_contacts_activity, container, false);
-        //инициализируем Recycleview
+
         rvContacts = (RecyclerView) v.findViewById(R.id.rvContacts);
-        //инициируем кнопку "Подтвердить"
+
         btnConfirm = (Button) v.findViewById(R.id.button_confirm);
-        //делаем кнопку неактивной
         btnConfirm.setEnabled(false);
         
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                prepareToStartServise();
                 goToHostActivity();
             }
         });
+
 
         prepareToWork();
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
@@ -118,13 +119,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     @Override
     public void onPause() {
         super.onPause();
-
-        if(db.isListChecked()&& ContactPreferences.getStoredMessage(getContext())!=null&&ContactPreferences.getStoredMessage(getContext()).length()>0) {
-            Intent intent = new Intent(getContext(), YourService.class);
-            intent.putExtra(YourService.HANDLE_REBOOT, true);
-            Log.d(TAG, "onPause ContactListActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
-            getActivity().startService(intent);
-        }
+        prepareToStartServise();
     }
 
 
@@ -146,15 +141,20 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             super.onPreExecute();
             dialog = new SpotsDialog(context);
             dialog.show();
+            Log.d(TAG,"onPreExecute() вызван");
         }
 
         //в этом методе происходит основная работа в фоне
         @Override
         protected List<UserData> doInBackground(Void... params) {
-            //получаем доступ к базе
-            //SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Log.d(TAG,"doInBackground(Void... params) вызван");
+            Cursor cursor = db.getAllData();
+            if((cursor != null) && (cursor.getCount() > 0)){
+                db.deleteAllData();
+            }
+
             List<UserData> userDataList = new ArrayList<>();
-            Log.d(TAG,"datalist is empty?"+String.valueOf(userDataList.isEmpty()));
+
             // создаем объект для данных
             ContentValues cv = new ContentValues();
 
@@ -259,6 +259,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         @Override
         protected void onPostExecute(List<UserData>list) {
             super.onPostExecute(list);
+            Log.d(TAG,"onPostExecute(List<UserData>list)  вызван");
             UserDataAdapter contactAdapter = new UserDataAdapter(list, getContext());
             //расположение будет вертикальным списком
             rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -272,8 +273,9 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public void prepareToWork(){
         db = new DB(getContext());
         db.open();
-        //запускаем в работу AsyncTask
         new MyTask(getContext()).execute();
+        //new MyTask(getContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     public void goToHostActivity(){
@@ -283,6 +285,18 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         //стартуем интент
         startActivity(intent);
+    }
+
+    public void prepareToStartServise(){
+        Log.d(TAG,"prepareToStartServise() вызван");
+        if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
+                ContactPreferences.getStoredMessage(getContext()).length()>0) {
+
+            Intent intent = new Intent(getContext(), YourService.class);
+            intent.putExtra(YourService.HANDLE_REBOOT, true);
+            db.close();
+            getActivity().startService(intent);
+        }
     }
 
 

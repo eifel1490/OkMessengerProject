@@ -3,6 +3,7 @@ package com.example.imokmessenger.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,6 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
         }
 
         return  v;
-
-       
     }
 
     @OnClick(R.id.button_save_charge)
@@ -70,10 +69,8 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
 
         if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
             ContactPreferences.setStoredCharge(getContext(),chargeLevel);
-            prepareToServiseStart();
-            Intent intent = new Intent(getContext(),MainActivityND.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            prepareToStartServise();
+            goToHostActivity();
         }
         else Toast.makeText(getContext(),"Введите уровень батареи",Toast.LENGTH_SHORT).show();
     }
@@ -95,15 +92,12 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
     @Override
     public void onPause() {
         super.onPause();
-        prepareToServiseStart();
+        prepareToStartServise();
     }
 
     public void goToHostActivity(){
-        
         Intent intent = new Intent(getContext(),MainActivityND.class);
-       
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        
         startActivity(intent);
     }
 
@@ -113,8 +107,8 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
         super.onDestroyView();
         unbinder.unbind();
     }
-    
-    public void prepareToServiseStart(){
+
+    public void prepareToStartServise(){
         if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
                 ContactPreferences.getStoredMessage(getContext()).length()>0) {
 

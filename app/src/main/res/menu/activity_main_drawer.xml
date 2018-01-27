@@ -3,26 +3,40 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-
+            android:icon="@drawable/home_image"
             android:title="@string/home" />
         <item
             android:id="@+id/changeBatteryLevel"
-
+            android:icon="@drawable/battery_image"
             android:title="@string/set_battery_level" />
-        <item
-            android:id="@+id/rules"
 
-            android:title="@string/rules" />
-    </group>
-
-    <group android:checkableBehavior="single">
         <item
             android:id="@+id/edit_contacts"
+            android:icon="@drawable/change_contacts_image"
             android:title="@string/edit_contacts" />
+
         <item
             android:id="@+id/edit_message"
+            android:icon="@drawable/change_message_image"
             android:title="@string/edit_messages" />
     </group>
+
+
+    <item android:title="">
+        <menu>
+
+            <item
+            android:id="@+id/rules"
+                android:icon="@drawable/rules_image"
+            android:title="@string/rules" />
+
+            <item
+            android:id="@+id/about_version"
+            android:icon="@drawable/about_version_image"
+            android:title="@string/rules" />
+
+        </menu>
+    </item>
 
 
 

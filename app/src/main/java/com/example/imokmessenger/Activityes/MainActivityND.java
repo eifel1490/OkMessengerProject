@@ -22,6 +22,7 @@ import com.example.imokmessenger.Fragments.BatteryLevelChangeFragment;
 import com.example.imokmessenger.Fragments.ContactListFragment;
 import com.example.imokmessenger.Fragments.ContactsMessageFragment;
 import com.example.imokmessenger.Fragments.HomeFragment;
+import com.example.imokmessenger.Fragments.InfoFragment;
 import com.example.imokmessenger.Fragments.UserRulesFragment;
 import com.example.imokmessenger.LocaleHelper;
 import com.example.imokmessenger.R;
@@ -41,6 +42,12 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showFragment(new InfoFragment());
     }
 
 
@@ -81,7 +88,9 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         if(s == "2"){
             showFragment(new ContactsMessageFragment());
         }
-
+        if(s == "3"){
+            showFragment(new InfoFragment());
+        }
     }
 
     @Override
@@ -115,13 +124,11 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
 
         if(id == R.id.edit_contacts){
-            //TODO кнопка контактов становится активной
-            passingValueToFrgment("1");
+            showFragment(new ContactListFragment());
         }
 
         if(id == R.id.edit_message){
-            //TODO кнопка сообщений становится активной
-            passingValueToFrgment("2");
+            showFragment(new ContactsMessageFragment());
         }
 
 
@@ -154,7 +161,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         Log.d(TAG,"updateViews is called");
         LocaleHelper.setLocale(getApplication(), languageCode);
         updateScreen();
-        //this.recreate();
     }
 
     @Override
@@ -171,7 +177,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
                 return true;
 
             case R.id.menu_item_english:
-                //updateViews("en");
+                updateViews("en");
                 return true;
 
             default:
