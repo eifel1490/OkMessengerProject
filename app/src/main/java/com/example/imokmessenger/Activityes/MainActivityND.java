@@ -44,6 +44,12 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         this.onBackPressedListener = onBackPressedListener;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showFragment(new InfoFragment());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -26,9 +26,10 @@
             android:padding="10dp"
             style="@style/InfoText"
             android:layout_weight="1"
+            android:scrollbars = "vertical"
             android:background="@color/info_text_field"
             android:layout_margin="10dp"
-            android:text="dd" />
+            android:text="" />
 
 
         <TextView
@@ -37,6 +38,7 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             style="@style/InfoText"
+            android:scrollbars = "vertical"
             android:layout_weight="1"
             android:background="@color/info_text_field"
             android:layout_margin="10dp"
