@@ -47,8 +47,11 @@ public class InfoFragment extends Fragment {
         infoSelectChargeLevel = (TextView)v.findViewById(R.id.textViewSelectChargeLevel);
         String userMessages = ContactPreferences.getStoredMessage(getContext());
         String userCharge = ContactPreferences.getStoredCharge(getContext());
-        infoSelectMessage.setText("Выбранное сообщение: "+'\n'+userMessages);
-        if(userCharge.length()>0) {
+        if(userMessages!=null){
+            infoSelectMessage.setText("Выбранное сообщение: "+'\n'+userMessages);
+        }
+        else infoSelectMessage.setText("Сообщение не выбрано");
+        if(userCharge!=null) {
             infoSelectChargeLevel.setText("Уровень заряда: " + '\n' + userCharge+"%");
         }
         else infoSelectChargeLevel.setText("Уровень заряда: " + '\n' + "по умолчанию 5 %");

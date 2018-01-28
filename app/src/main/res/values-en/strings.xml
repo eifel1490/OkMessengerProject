@@ -30,8 +30,8 @@
     <string name="cont_description">cont_description1</string>
     <string name="set_OK">ОК</string>
     <string name="rules">Rules</string>
-    <string name="edit_contacts">Редактировать контакты</string>
-    <string name="edit_messages">Редактировать сообщение</string>
+    <string name="edit_contacts">Edit contacts</string>
+    <string name="edit_messages">Edit message</string>
     <string name="about_version">About version</string>
 
 </resources>

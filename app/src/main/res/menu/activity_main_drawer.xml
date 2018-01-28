@@ -33,7 +33,7 @@
             <item
             android:id="@+id/about_version"
             android:icon="@drawable/about_version_image"
-            android:title="@string/rules" />
+            android:title="@string/about_version" />
 
         </menu>
     </item>

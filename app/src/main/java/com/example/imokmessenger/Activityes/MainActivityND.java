@@ -44,12 +44,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         this.onBackPressedListener = onBackPressedListener;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        showFragment(new InfoFragment());
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,12 +190,5 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     }
 
-    //для отпраки значения во фрагмент
-    public void passingValueToFrgment(String s){
-        Bundle bundle = new Bundle();
-        bundle.putString(PARAMS, s);
 
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
-    }
 }
