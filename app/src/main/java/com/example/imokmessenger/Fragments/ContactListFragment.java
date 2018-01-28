@@ -160,8 +160,6 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
 
             //создаем обьект contentResolver
             ContentResolver contentResolver = getActivity().getContentResolver();
-            //TODO попробовать другой алгоритм вытяжки данных из ContentProvider,этот долго работает
-            //или поставить этот алгоритм в фоновый режим
             //создаем курсор с запросом "вытянуть все из contentProvider-базы ContactsContract.Contacts.CONTENT_URI"
             Cursor cursorContentResolver = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
             //если курсор вернулся непустой(то есть есть хотя бы одна строка)

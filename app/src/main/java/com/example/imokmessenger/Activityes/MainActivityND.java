@@ -31,8 +31,7 @@ import com.example.imokmessenger.R;
 public class MainActivityND extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.onSomeEventListener {
 
     private static final String TAG = "MainActivityND";
-    //константа для отправки во фрагмент
-    public static final String PARAMS = "params";
+
     //обьект слушателя для нажатия кнопки Назад во фрагменте
     protected OnBackPressedListener onBackPressedListener;
 
