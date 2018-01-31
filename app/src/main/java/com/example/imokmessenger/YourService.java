@@ -78,35 +78,36 @@ public class YourService extends Service {
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             int percent = (level * 100) / scale;
 
-            Log.d(TAG, "Уровень заряда батареи: " + percent);
-            if(batteryChargeLevel!=null&&
-                    batteryChargeLevel.length()>0) {
-                Log.d(TAG, "stored value = " + batteryChargeLevel);
-                boolean flag = false;
+            if(!isCharging) {
+                Log.d(TAG, "Уровень заряда батареи: " + percent);
+                if (batteryChargeLevel != null &&
+                        batteryChargeLevel.length() > 0) {
+                    Log.d(TAG, "stored value = " + batteryChargeLevel);
+                    boolean flag = false;
 
-                while (percent == Integer.parseInt(batteryChargeLevel)) {
+                    while (percent == Integer.parseInt(batteryChargeLevel)) {
 
-                    if (!flag) {
-                        Log.d(TAG,"Подготовка к отправке сообщения");
-                        sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
-                        Log.d(TAG,"Сообщение отправлено успешно после"+
-                        "достижения уровня батареи "+percent);
-                        flag = true;
+                        if (!flag) {
+                            Log.d(TAG, "Подготовка к отправке сообщения");
+                            sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                            Log.d(TAG, "Сообщение отправлено успешно после" +
+                                    "достижения уровня батареи " + percent);
+                            flag = true;
+                        }
                     }
-                }
 
-            }
-            else if (batteryChargeLevel==null||batteryChargeLevel.length()==0){
-                Log.d(TAG, "пользователь не указывал значение заряда,сообщение будет"+
-                "отправлено в штатном режиме 5 процентов");
-                boolean flag = false;
+                } else if (batteryChargeLevel == null || batteryChargeLevel.length() == 0) {
+                    Log.d(TAG, "пользователь не указывал значение заряда,сообщение будет" +
+                            "отправлено в штатном режиме 5 процентов");
+                    boolean flag = false;
 
-                while (percent == 5) {
+                    while (percent == 5) {
 
-                    if (!flag) {
-                        sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
-                        Log.d(TAG,"Сообщение отправлено успешно в штатном режиме 5 процентов заряда");
-                        flag = true;
+                        if (!flag) {
+                            sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
+                            Log.d(TAG, "Сообщение отправлено успешно в штатном режиме 5 процентов заряда");
+                            flag = true;
+                        }
                     }
                 }
             }
