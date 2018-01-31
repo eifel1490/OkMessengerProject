@@ -21,7 +21,8 @@
         </service>
 
 
-        <activity android:name=".Activityes.MainActivityND">
+        <activity android:name=".Activityes.MainActivityND"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
