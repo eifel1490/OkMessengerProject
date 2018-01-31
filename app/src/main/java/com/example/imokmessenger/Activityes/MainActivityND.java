@@ -123,9 +123,12 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         if(id == R.id.edit_message){
             showFragment(new ContactsMessageFragment());
         }
-
-
         
+        if(id == R.id.edit_message){
+            showFragment(new LicenseFragment());
+        }
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
