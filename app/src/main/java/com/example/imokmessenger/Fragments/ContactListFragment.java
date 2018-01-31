@@ -35,6 +35,12 @@ import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import dmax.dialog.SpotsDialog;
 
 
@@ -271,7 +277,8 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public void prepareToWork(){
         db = new DB(getContext());
         db.open();
-        new MyTask(getContext()).execute();
+        new MyTask(getContext()).executeOnExecutor(prepareToStartAsyncTask());
+        //new MyTask(getContext()).execute();
         //new MyTask(getContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
@@ -295,6 +302,17 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             db.close();
             getActivity().startService(intent);
         }
+    }
+
+    //solution if doInBackground doesn't called after onPreExecute
+    public Executor prepareToStartAsyncTask(){
+        int corePoolSize = 60;
+        int maximumPoolSize = 80;
+        int keepAliveTime = 10;
+
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+        Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+        return threadPoolExecutor;
     }
 
 

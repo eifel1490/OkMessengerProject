@@ -23,6 +23,7 @@ import com.example.imokmessenger.Fragments.ContactListFragment;
 import com.example.imokmessenger.Fragments.ContactsMessageFragment;
 import com.example.imokmessenger.Fragments.HomeFragment;
 import com.example.imokmessenger.Fragments.InfoFragment;
+import com.example.imokmessenger.Fragments.LicenseFragment;
 import com.example.imokmessenger.Fragments.UserRulesFragment;
 import com.example.imokmessenger.LocaleHelper;
 import com.example.imokmessenger.R;
@@ -124,8 +125,10 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
             showFragment(new ContactsMessageFragment());
         }
         
-        if(id == R.id.edit_message){
-            showFragment(new LicenseFragment());
+        if(id == R.id.about_version){
+            LicenseFragment licensesFragment = new LicenseFragment();
+            //показываем фрагмент
+            licensesFragment.show((this).getSupportFragmentManager().beginTransaction(), "dialog_licenses");
         }
 
 
