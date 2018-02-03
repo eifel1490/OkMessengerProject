@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/images">
+    android:background="@color/white">
 
 
     <LinearLayout
@@ -25,9 +25,9 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             style="@style/InfoText"
+            android:background="@drawable/custom_message_edit_text"
             android:layout_weight="1"
             android:scrollbars = "vertical"
-            android:background="@color/info_text_field"
             android:layout_margin="10dp"
             android:text="" />
 
@@ -39,8 +39,8 @@
             android:padding="10dp"
             style="@style/InfoText"
             android:scrollbars = "vertical"
+            android:background="@drawable/custom_message_edit_text"
             android:layout_weight="1"
-            android:background="@color/info_text_field"
             android:layout_margin="10dp"
             android:text="@string/select_contacts_for_dispatch" />
 
@@ -52,7 +52,7 @@
             android:padding="10dp"
             style="@style/InfoText"
             android:layout_weight="1"
-            android:background="@color/info_text_field"
+            android:background="@drawable/custom_message_edit_text"
             android:layout_margin="10dp"
             android:text="@string/select_contacts_for_dispatch" />
 
