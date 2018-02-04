@@ -3,6 +3,8 @@ package com.example.imokmessenger.Adapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.amulyakhare.textdrawable.TextDrawable;
 
 import com.example.imokmessenger.DataBase.ContactsDbSchema;
 import com.example.imokmessenger.DataBase.DB;
@@ -19,6 +23,7 @@ import com.example.imokmessenger.Model.UserData;
 import com.example.imokmessenger.R;
 
 import java.util.List;
+import java.util.Random;
 
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ContactViewHolder>{
 
@@ -87,6 +92,18 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
             }
 
         });
+
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+        TextDrawable myDrawable = TextDrawable.builder().beginConfig()
+                .textColor(Color.WHITE)
+                .useFont(Typeface.DEFAULT)
+                .toUpperCase()
+                .endConfig()
+                .buildRound(userData.getContactName().substring(0,1),color);
+
+        holder.mColorImageView.setImageDrawable(myDrawable);
     }
 
     //метод возвращает размер листа
@@ -117,12 +134,14 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         CheckBox tvCheckContact;
         TextView tvContactName;
         TextView tvPhoneNumber;
+        ImageView mColorImageView;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
             tvCheckContact = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
             tvContactName = (TextView) itemView.findViewById(R.id.tvContactName);
             tvPhoneNumber = (TextView) itemView.findViewById(R.id.tvPhoneNumber);
+            mColorImageView = (ImageView)itemView.findViewById(R.id.toDoListItemColorImageView);
         }
     }
 }
