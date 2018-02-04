@@ -44,7 +44,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //с помощью инфлятора "надуваем" вью из макета single_contact_view
-        View view = LayoutInflater.from(mContext).inflate(R.layout.single_contact_view, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.m_single_contact_view, parent, false);
         //создаем обьект ContactViewHolder contactViewHolder,в конструктор передаем вью
         ContactViewHolder contactViewHolder = new ContactViewHolder(view);
         return contactViewHolder;
