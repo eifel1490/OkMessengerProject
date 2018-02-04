@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ import com.example.imokmessenger.Model.UserData;
 import com.example.imokmessenger.Adapter.UserDataAdapter;
 
 import com.example.imokmessenger.YourService;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import junit.framework.Test;
 
@@ -41,7 +43,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import dmax.dialog.SpotsDialog;
 
 
 /*класс отображающий список конактов для пользователя*/
@@ -53,6 +54,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     RecyclerView rvContacts;
     Button btnConfirm;
     DB db;
+    CircularProgressBar circularProgressBar;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -70,6 +72,14 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         View v = inflater.inflate(R.layout.all_contacts_activity, container, false);
 
         rvContacts = (RecyclerView) v.findViewById(R.id.rvContacts);
+
+        circularProgressBar = (CircularProgressBar) v.findViewById(R.id.yourCircularProgressbar);
+        CircularProgressBar circularProgressBar = (CircularProgressBar) v.findViewById(R.id.yourCircularProgressbar);
+        circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+        circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.title_separator));
+        int animationDuration = 3000;
+        circularProgressBar.setProgressWithAnimation(100, animationDuration);
+
 
         btnConfirm = (Button) v.findViewById(R.id.button_confirm);
         btnConfirm.setEnabled(false);
@@ -145,8 +155,10 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new SpotsDialog(context);
-            dialog.show();
+            //dialog = new SpotsDialog(context);
+            //dialog.show();
+
+            circularProgressBar.setVisibility(View.VISIBLE);
             Log.d(TAG,"onPreExecute() вызван");
         }
 
@@ -270,7 +282,8 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
             //закрываем прогрессдиалог
-            dialog.dismiss();
+            //dialog.dismiss();
+            circularProgressBar.setVisibility(View.GONE);
         }
     }
     
@@ -278,6 +291,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         db = new DB(getContext());
         db.open();
         new MyTask(getContext()).executeOnExecutor(prepareToStartAsyncTask());
+
         //new MyTask(getContext()).execute();
         //new MyTask(getContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
