@@ -15,6 +15,9 @@
     <color name="theme_primary">#ff005ba8</color>
     <color name="dialog_select_theme_separator_strip">#ffd0d0d0</color>
     <color name="translucent_category_inactive">#d5cecfce</color>
+    <color name="secondary_text">#727272</color>
+    <color name="accent">#03A9F4</color>
+    <color name="icons">#FFFFFF</color>
 
     <color name="genre">#666666</color>
     <color name="year">#888888</color>

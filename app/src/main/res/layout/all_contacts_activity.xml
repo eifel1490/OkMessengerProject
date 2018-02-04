@@ -4,25 +4,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-    android:background="@drawable/nav_header_picture"
+    android:background="@color/white"
     android:orientation="vertical">
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:background="@color/counter_text_color"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/info_for_user"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:text="@string/text_for_info_for_user" />
-
-    </android.support.v7.widget.CardView>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvContacts"
@@ -31,10 +14,15 @@ android:layout_height="match_parent"
         android:layout_height="0dp">
     </android.support.v7.widget.RecyclerView>
 
+
     <Button
         android:id="@+id/button_confirm"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="@style/ButtonText"
+        android:background="@drawable/button_fb_gb"
+        android:layout_margin="10dp"
         android:text="@string/text_for_button_confirm" />
 
     </LinearLayout>

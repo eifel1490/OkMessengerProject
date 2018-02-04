@@ -5,12 +5,12 @@
     <item android:id="@+id/menu_item_russian"
         android:title="@string/set_Russian"
         android:icon="@drawable/russian_flag"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item android:id="@+id/menu_item_english"
         android:title="@string/set_English"
         android:icon="@drawable/american_flag"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
 
 </menu>
