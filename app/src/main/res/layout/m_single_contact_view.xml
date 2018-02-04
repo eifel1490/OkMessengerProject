@@ -39,7 +39,7 @@
                 android:textColor="@color/secondary_text"
                 android:ellipsize="end"
                 android:textSize="16sp"
-                android:text="Clean your room"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="0dp"
