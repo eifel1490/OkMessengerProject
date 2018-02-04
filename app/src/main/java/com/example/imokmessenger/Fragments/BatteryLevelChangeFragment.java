@@ -53,7 +53,6 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
         db = new DB(getContext());
         db.open();
         chargeBatteryLevel = ContactPreferences.getStoredCharge(getContext());
-        Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
         unbinder = ButterKnife.bind(this, v);
 
         if(chargeBatteryLevel!=null){
@@ -82,7 +81,6 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
 
     @OnClick (R.id.button_reset)
     void onButtonResetClick() {
-        Toast.makeText(getContext(),chargeBatteryLevel,Toast.LENGTH_SHORT).show();
         if(chargeBatteryLevel!=null){
             ContactPreferences.setStoredCharge(getContext(),"");
             editChargeText.setText(String.valueOf(""));

@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static android.R.id.message;
-import static com.example.imokmessenger.R.id.textView;
+
 
 
 public class InfoFragment extends Fragment {
