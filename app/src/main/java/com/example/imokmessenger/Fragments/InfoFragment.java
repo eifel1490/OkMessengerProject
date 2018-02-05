@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class InfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.information_screen, container, false);
 
         infoSelectContacts = (TextView)v.findViewById(R.id.textViewSelectContacts);
+        infoSelectContacts.setMovementMethod(new ScrollingMovementMethod());
         infoSelectMessage = (TextView)v.findViewById(R.id.textViewSelectMessage);
         infoSelectChargeLevel = (TextView)v.findViewById(R.id.textViewSelectChargeLevel);
         String userMessages = ContactPreferences.getStoredMessage(getContext());
