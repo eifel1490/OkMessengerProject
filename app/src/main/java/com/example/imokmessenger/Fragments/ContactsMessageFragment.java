@@ -41,7 +41,6 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.contacts_message_activity, container, false);
         db = new DB(getContext());
         db.open();
@@ -49,6 +48,7 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
         saveMessage = (Button) v.findViewById(R.id.button_save);
         saveMessage.setEnabled(false);
         editUserText.addTextChangedListener(new TextWatcher() {
+            
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -90,8 +90,6 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
                 goToHostActivity();
             }
         });
-
-
         return v;
     }
 
@@ -102,11 +100,8 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
     }
 
     public void goToHostActivity(){
-        //создаем интент на MainActivity
         Intent intent = new Intent(getContext(),MainActivityND.class);
-        //очищаем бэкстек
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //стартуем интент
         startActivity(intent);
     }
 
@@ -116,7 +111,7 @@ public class ContactsMessageFragment extends Fragment implements MainActivityND.
 
             Intent intent = new Intent(getContext(), YourService.class);
             intent.putExtra(YourService.HANDLE_REBOOT, true);
-            Log.d(TAG,"onPause ContactsMessageActivity" + String.valueOf(intent.putExtra(YourService.HANDLE_REBOOT, true) != null));
+            
             db.close();
             getActivity().startService(intent);
         }
