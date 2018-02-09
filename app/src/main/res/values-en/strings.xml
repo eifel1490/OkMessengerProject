@@ -4,9 +4,9 @@
     <string name="select_contacts_for_dispatch">Select contacts</string>
     <string name="choose_text_for_sms">Select text for message</string>
     <string name="edit_data">Edit</string>
-    <string name="text_for_info_for_user">Please,mark the necessary contacts in the list</string>
+    <string name="select_contact_to_send_message">Please,mark the necessary contacts in the list</string>
     <string name="text_for_button_confirm">Confirm</string>
-    <string name="hint_text">Enter text here</string>
+    <string name="enter_your_message">Enter text here</string>
     <string name="message_text_intro">Please,enter the text for your message</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,7 +18,7 @@
     <string name="cancel">Cancel</string>
     <string name="reset">Reset</string>
     <string name="save">Save</string>
-    <string name="enter_your_message">Enter your message</string>
+    <string name="enter_your_message_text">Enter your message</string>
     <string name="content_desc">header image for navigation panel1</string>
     <string name="imok">I\'m OK</string>
     <string name="mail">maximturkin50@gmail.com</string>
@@ -34,5 +34,13 @@
     <string name="edit_messages">Edit message</string>
     <string name="about_version">About version</string>
     <string name="dialog_title_licenses">Open Source Licenses</string>
+    
+    
+    
+    
+
+
+
+
 
 </resources>
