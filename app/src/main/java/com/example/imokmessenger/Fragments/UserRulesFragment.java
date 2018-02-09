@@ -52,11 +52,9 @@ public class UserRulesFragment extends Fragment implements MainActivityND.OnBack
     }
 
     public void goToHostActivity(){
-        //создаем интент на MainActivity
+        
         Intent intent = new Intent(getContext(),MainActivityND.class);
-        //очищаем бэкстек
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //стартуем интент
         startActivity(intent);
     }
 
