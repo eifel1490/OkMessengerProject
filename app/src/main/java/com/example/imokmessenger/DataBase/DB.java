@@ -13,36 +13,32 @@ import com.example.imokmessenger.Model.UserData;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Класс базы данных
- */
+
 
 public class DB {
 
     private static final String TAG = "databaselog";
-
-    //версия БД
     private static final int VERSION = 1;
-    //имя БД
     private static final String DATABASE_NAME = "contactsBase.db";
+    
+    private final Context mCtx;
+    private DBHelper mDBHelper;
+    private SQLiteDatabase mDB;
 
     public static final class ContactsTable {
-        //название таблицы
+        
         public static final String DB_TABLE = "contacts";
 
         public static final class Cols {
-            //столбец ИД
+            
             public static final String ID = "contact_id";
-            //столбец имя контакта
             public static final String NAME = "contact_name";
-            //столбец номер контакта
             public static final String PHONE = "contact_phone";
-            //столбец выбран ли контакт
             public static final String SELECTED = "selected";
         }
     }
 
-    //команда создания таблицы контактов
+    
     public static final String DB_CONTACTS_CREATE =
             "create table " + ContactsTable.DB_TABLE + "(" + " _id integer primary key autoincrement, " +
                     ContactsTable.Cols.ID + ", " +
@@ -51,11 +47,7 @@ public class DB {
                     ContactsTable.Cols.SELECTED +
                     ")";
 
-    private final Context mCtx;
-
-
-    private DBHelper mDBHelper;
-    private SQLiteDatabase mDB;
+    
 
     public DB(Context ctx) {
         mCtx = ctx;
