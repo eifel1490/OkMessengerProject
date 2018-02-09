@@ -42,21 +42,25 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.information_screen, container, false);
-
-        infoSelectContacts = (TextView)v.findViewById(R.id.textViewSelectContacts);
-        infoSelectContacts.setMovementMethod(new ScrollingMovementMethod());
+        
         infoSelectMessage = (TextView)v.findViewById(R.id.textViewSelectMessage);
         infoSelectChargeLevel = (TextView)v.findViewById(R.id.textViewSelectChargeLevel);
+        infoSelectContacts = (TextView)v.findViewById(R.id.textViewSelectContacts);
+        infoSelectContacts.setMovementMethod(new ScrollingMovementMethod());
+        
         String userMessages = ContactPreferences.getStoredMessage(getContext());
         String userCharge = ContactPreferences.getStoredCharge(getContext());
+        
         if(userMessages!=null){
             infoSelectMessage.setText("Выбранное сообщение: "+'\n'+userMessages);
         }
         else infoSelectMessage.setText("Сообщение не выбрано");
+        
         if(userCharge!=null) {
             infoSelectChargeLevel.setText("Уровень заряда: " + '\n' + userCharge+"%");
         }
         else infoSelectChargeLevel.setText("Уровень заряда: " + '\n' + "по умолчанию 5 %");
+        
         infoSelectContacts.setText("Выбранные контакты: "+'\n');
 
 
@@ -83,9 +87,7 @@ public class InfoFragment extends Fragment {
             }
         });
         t.start();
-
-
-
+        
         return  v;
     }
 
