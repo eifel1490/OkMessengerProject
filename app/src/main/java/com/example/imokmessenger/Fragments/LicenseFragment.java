@@ -1,7 +1,5 @@
 package com.example.imokmessenger.Fragments;
 
-//вставить импорты
-
 
 import android.app.Dialog;
 import android.content.Intent;
