@@ -33,9 +33,9 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     private static final String TAG = "MainActivityND";
 
-    //обьект слушателя для нажатия кнопки Назад во фрагменте
     protected OnBackPressedListener onBackPressedListener;
 
+    //implementation of pressing a Back button in fragments 
     public interface OnBackPressedListener {
         void doBack();
     }
@@ -49,11 +49,10 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_nd);
-        //Тулбар
+        
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //Тулбар будет использовать все свойства старого ActionBar
         setSupportActionBar(toolbar);
-        //по умолчанию будет выводится фрагмент главной страницы
+        
         if (savedInstanceState == null) {
             Fragment newFragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -73,9 +72,9 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     }
 
-    //метод интерфейса,обьявленного во фрагментах.Отлавливаем значения
+    //implementation fargments interface
     @Override
-    public void someEvent(String s) {
+    public void someEventInFragments(String s) {
         if(s == "1"){
             showFragment(new ContactListFragment());
         }
@@ -87,6 +86,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
     }
 
+    
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,10 +101,12 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
     }
 
+    //handler for menu items
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        
         if (id == R.id.home) {
             showFragment(new HomeFragment());
         }
@@ -137,6 +139,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    //displays a fragment in the container
     public void showFragment(Fragment fragment){
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -151,11 +154,13 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         super.onDestroy();
     }
 
+    //set locale in contast
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
+    //update activity with new locale
     private void updateViews(String languageCode) {
         Log.d(TAG,"updateViews is called");
         LocaleHelper.setLocale(getApplication(), languageCode);
@@ -168,6 +173,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    ////handler for menu items in ActionBar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -185,7 +191,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
     }
 
-    //для плавного обновления активити
+    
     public void updateScreen(){
         Intent intent= new Intent(MainActivityND.this,MainActivityND.class);
         finish();
