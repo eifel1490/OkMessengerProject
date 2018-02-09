@@ -28,29 +28,22 @@ public class LicenseFragment extends DialogFragment implements MainActivityND.On
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.d(TAG,"onCreateDialog called");
-        //LayoutInflater – это класс, который умеет из содержимого layout-файла создать View-элемент.
-        LayoutInflater dialogInflater = getActivity().getLayoutInflater();
-        //создаем вью из макета fragment_licenses
-        View openSourceLicensesView = dialogInflater.inflate(R.layout.fragment_licenses, null);
-        //создаем диалог
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         
+        LayoutInflater dialogInflater = getActivity().getLayoutInflater();
+        View openSourceLicensesView = dialogInflater.inflate(R.layout.fragment_licenses, null);
+       
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setView(openSourceLicensesView)
-                //устанавливаем заголовок
                 .setTitle((getString(R.string.dialog_title_licenses)))
-                //устанавливаем нейтральную кнопку ОК
                 .setNeutralButton(android.R.string.ok, null);
 
         return dialogBuilder.create();
     }
 
     public void goToHostActivity(){
-        //создаем интент на MainActivity
+        
         Intent intent = new Intent(getContext(),MainActivityND.class);
-        //очищаем бэкстек
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //стартуем интент
         startActivity(intent);
     }
 
