@@ -120,6 +120,10 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
 
         if(id == R.id.edit_contacts){
+            showFragment(ContactListFragment.newInstance("1"));
+        }
+        
+        if(id == R.id.update_contacts){
             showFragment(new ContactListFragment());
         }
 
