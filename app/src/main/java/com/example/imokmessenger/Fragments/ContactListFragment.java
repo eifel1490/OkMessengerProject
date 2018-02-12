@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,17 +50,37 @@ import java.util.concurrent.TimeUnit;
 public class ContactListFragment extends Fragment implements MainActivityND.OnBackPressedListener {
 
     public static final String TAG = "ContactListActivity";
-
+    private static final String CONTACTLISTFRAGMENT_ID = "cont_id";
 
     RecyclerView rvContacts;
     Button btnConfirm;
     DB db;
     CircularProgressBar circularProgressBar;
+    String value;
+
+    public static ContactListFragment newInstance(String index) {
+        Bundle args = new Bundle();
+        args.putSerializable(CONTACTLISTFRAGMENT_ID, index);
+        ContactListFragment fragment = new ContactListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments()!=null) {
+            value = String.valueOf(getArguments().getSerializable(CONTACTLISTFRAGMENT_ID));
+        }
+
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((MainActivityND) getActivity()).setOnBackPressedListener(this);
+
     }
 
     @Override
@@ -70,7 +91,11 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         
         View v = inflater.inflate(R.layout.all_contacts_activity, container, false);
-
+        //ОТКРЫВАЕМ БАЗУ
+        db = new DB(getContext());
+        db.open();
+        
+        
         rvContacts = (RecyclerView) v.findViewById(R.id.rvContacts);
 
         circularProgressBar = (CircularProgressBar) v.findViewById(R.id.yourCircularProgressbar);
@@ -92,11 +117,21 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             }
         });
 
+        if(value!=null){
+            Log.d(TAG, "value = " + value);
 
-        prepareToWork();
+            if(value.length()>0) {
+
+                if (value.equals("1")) {
+                    new MyTaskDownloadFromDatabase(getContext()).executeOnExecutor(prepareToStartAsyncTask());
+                }
+            }
+        }
+        else
+            new MyTaskDownloadFromContentProvider(getContext()).executeOnExecutor(prepareToStartAsyncTask());
+
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
-
 
         return v;
     }
@@ -136,178 +171,155 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public void onPause() {
         super.onPause();
         prepareToStartServise();
+        db.close();
     }
-
-
-    //класс AsyncTask, выполняет операции в фоне
-    private class MyTask extends AsyncTask<Void, Void, List<UserData>> {
-
+    
+    
+    private class MyTaskDownloadFromDatabase extends AsyncTask<Void, Void, List<UserData>> {
+        
         private Context context;
-        private AlertDialog dialog;
-
-
-        public MyTask(Context context) {
+        DB db;
+        
+        public MyTaskDownloadFromDatabase(Context context){
             this.context = context;
-
         }
-
+        
         //метод вызывается в начале работы AsyncTask
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //dialog = new SpotsDialog(context);
-            //dialog.show();
-
-            circularProgressBar.setVisibility(View.VISIBLE);
-            Log.d(TAG,"onPreExecute() вызван");
+            //ОТКРЫВАЕМ БАЗУ
+            db = new DB(context);
+            db.open();
+            circularProgressBar.setVisibility(View.GONE);
         }
-
-        //в этом методе происходит основная работа в фоне
+        
         @Override
         protected List<UserData> doInBackground(Void... params) {
-            Log.d(TAG,"doInBackground(Void... params) вызван");
-            Cursor cursor = db.getAllData();
-            if((cursor != null) && (cursor.getCount() > 0)){
-                db.deleteAllData();
-            }
-
             List<UserData> userDataList = new ArrayList<>();
-
-            // создаем объект для данных
-            ContentValues cv = new ContentValues();
-
-            //создаем обьект contentResolver
-            ContentResolver contentResolver = getActivity().getContentResolver();
-            //создаем курсор с запросом "вытянуть все из contentProvider-базы ContactsContract.Contacts.CONTENT_URI"
-            Cursor cursorContentResolver = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-            //если курсор вернулся непустой(то есть есть хотя бы одна строка)
-
             try {
-
-                if (cursorContentResolver.getCount() > 0) {
-                    //передвигаем парсер на первую позицию
-                    while (cursorContentResolver.moveToNext()) {
-                        //получаем интовую переменную из поля contentProvider-базы,которая будет индикатором есть ли в контакте телефонный номер
-                        int hasPhoneNumber = Integer.parseInt(cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
-                        //если в контакте есть телефонный номер,то...
-                        if (hasPhoneNumber > 0) {
-                            //...вычитываем значение ИД контакта
-                            String id = cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts._ID));
-                            //записываем его в contentValues
-                            cv.put("contact_id", id);
-                            //затем вычитываем значение имени контакта
-                            String name = cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            //и тоже записываем его в contentValues
-                            cv.put("contact_name", name);
-                            //создаем курсор с запросом "вытянуть все из contentProvider-базы ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            //где поле ContactsContract.CommonDataKinds.Phone.CONTACT_ID совпадает с введенным нами ИД
-                            Cursor phoneCursor = contentResolver.query(
-                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                    new String[]{id},
-                                    null);
-                            //передвигаем парсер на первую позицию
-                            if (phoneCursor.moveToNext()){
-                                //вычитываем значение телефонного номера контакта
-                                String phone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                //записываем телефонный номер в contentValues
-                                cv.put("contact_phone",phone.replaceAll("\\s+",""));
-                                //заполняем поле обьекта Контакт "телефонный номер"
-                                //userData.setContactNumber(phoneNumber);
-                            }
-                            //в колонку "выбрано" по умолчанию пишем 0,то есть не выбрано
-                            cv.put("selected", 0);
-                            //записываем строку в БД
-                            db.insert(cv);
-                            //закрываем phoneCursor
-                            phoneCursor.close();
-                        }
-                    }
+                    Cursor cursor1 = db.getAllData();
+                    userDataList = getDataFromCursor(cursor1,userDataList);
                 }
-            }
             finally {
-                if(cursorContentResolver!=null){
-                    cursorContentResolver.close();
-                }
-            }
-
-            Cursor c = db.getAllData();
-
-            //читаем данные из него,пока они там есть (цикл)
-            try {
-
-                if (c.moveToFirst()) {
-                    // определяем номера столбцов по имени в выборке
-                    int idColIndex = c.getColumnIndex("contact_id");
-                    int nameColIndex = c.getColumnIndex("contact_name");
-                    int phoneColIndex = c.getColumnIndex("contact_phone");
-                    int selectColIndex = c.getColumnIndex("selected");
-
-                    do {
-                        //создаем обьект типа UserData
-                        UserData userData = new UserData();
-                        //Заполняем его поля значениями из БД
-                        userData.setContactID(c.getString(idColIndex));
-                        userData.setContactName(c.getString(nameColIndex));
-                        userData.setContactNumber(c.getString(phoneColIndex));
-                        userData.setContactSelect(c.getString(selectColIndex));
-                        //кладем в список
-                        userDataList.add(userData);
-
-                        // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
-                    }
-                    while (c.moveToNext());
-                }
-            }
-            finally {
-                if(c!=null) {
-                    c.close();
+                    //cursor1.close();
                     db.close();
                 }
-            }
-
             return userDataList;
-
-        }
-
-        //метод вызывается после основной работы в фоне.Имеет связь с UI
+         }
+        
         @Override
         protected void onPostExecute(List<UserData>list) {
             super.onPostExecute(list);
-            Log.d(TAG,"onPostExecute(List<UserData>list)  вызван");
             UserDataAdapter contactAdapter = new UserDataAdapter(list, getContext());
-            //расположение будет вертикальным списком
             rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-            //присваиваем адаптер
             rvContacts.setAdapter(contactAdapter);
-            //закрываем прогрессдиалог
-            //dialog.dismiss();
+        }
+    }
+
+
+    //класс AsyncTask, выполняет операции в фоне
+    private class MyTaskDownloadFromContentProvider extends AsyncTask<Void, Void, List<UserData>> {
+
+        private Context context;
+        DB db;
+
+        public MyTaskDownloadFromContentProvider(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            db = new DB(context);
+            db.open();
+            circularProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        
+        @Override
+        protected List<UserData> doInBackground(Void... params) {
+            List<UserData> userDataList = new ArrayList<>();
+                Cursor cursor = db.getAllData();
+                if((cursor != null) && (cursor.getCount() > 0)){
+                    db.deleteAllData();
+                    Log.d(TAG,"data deleted");
+                }
+                
+                ContentValues cv = new ContentValues();
+
+                ContentResolver contentResolver = getActivity().getContentResolver();
+                Cursor cursorContentResolver = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                     try {
+                         if (cursorContentResolver.getCount() > 0) {
+                            while (cursorContentResolver.moveToNext()) {
+                                int hasPhoneNumber = Integer.parseInt(cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
+                                
+                                if (hasPhoneNumber > 0) {
+                                    String id = cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts._ID));
+                                    cv.put("contact_id", id);
+                                    String name = cursorContentResolver.getString(cursorContentResolver.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                                    cv.put("contact_name", name);
+                                    
+                                    Cursor phoneCursor = contentResolver.query(
+                                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                            null,
+                                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                            new String[]{id},
+                                            null);
+                                    
+                                    if (phoneCursor.moveToNext()){
+                                        String phone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                        cv.put("contact_phone",phone.replaceAll("\\s+",""));
+                                    }
+                                    
+                                    cv.put("selected", 0);
+                                    
+                                    db.insert(cv);
+                                    
+                                    phoneCursor.close();
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if(cursorContentResolver!=null){
+                            cursorContentResolver.close();
+                        }
+                    }
+                Cursor c = db.getAllData();
+                try {
+                    userDataList = getDataFromCursor(c,userDataList);
+                }
+
+                finally {
+                    if(c!=null) {
+                        c.close();
+                        db.close();
+                    }
+                }
+            return userDataList;
+        }
+
+        
+        @Override
+        protected void onPostExecute(List<UserData>list) {
+            super.onPostExecute(list);
+            UserDataAdapter contactAdapter = new UserDataAdapter(list, getContext());
+            rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvContacts.setAdapter(contactAdapter);
             circularProgressBar.setVisibility(View.GONE);
         }
     }
     
-    public void prepareToWork(){
-        db = new DB(getContext());
-        db.open();
-        new MyTask(getContext()).executeOnExecutor(prepareToStartAsyncTask());
-
-        //new MyTask(getContext()).execute();
-        //new MyTask(getContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-    }
-
     public void goToHostActivity(){
-        //создаем интент на MainActivity
         Intent intent = new Intent(getContext(),MainActivityND.class);
-        //очищаем бэкстек
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //стартуем интент
         startActivity(intent);
     }
 
     public void prepareToStartServise(){
-        Log.d(TAG,"prepareToStartServise() вызван");
+
         if(db.isListChecked()&&ContactPreferences.getStoredMessage(getContext())!=null&&
                 ContactPreferences.getStoredMessage(getContext()).length()>0) {
 
@@ -328,6 +340,32 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
         return threadPoolExecutor;
     }
+
+    public List<UserData> getDataFromCursor(Cursor c,List<UserData>list){
+        if (c.moveToFirst()) {
+            
+            int idColIndex = c.getColumnIndex("contact_id");
+            int nameColIndex = c.getColumnIndex("contact_name");
+            int phoneColIndex = c.getColumnIndex("contact_phone");
+            int selectColIndex = c.getColumnIndex("selected");
+
+            do {
+                UserData userData = new UserData();
+                userData.setContactID(c.getString(idColIndex));
+                userData.setContactName(c.getString(nameColIndex));
+                userData.setContactNumber(c.getString(phoneColIndex));
+                if(c.getString(selectColIndex).equals("1")){
+                    userData.setSolved(true);
+                }
+                userData.setContactSelect(c.getString(selectColIndex));
+                list.add(userData);
+            }
+            while (c.moveToNext());
+        }
+        return list;
+    }
+
+
 
 
 }

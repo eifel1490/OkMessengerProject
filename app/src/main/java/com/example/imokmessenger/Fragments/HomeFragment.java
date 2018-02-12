@@ -20,14 +20,10 @@ public class HomeFragment extends Fragment  {
 
     public static final String TAG = "myLog";
 
-    //кнопки
     Button chooseContacts, createMessageText;
     DB db;
     onSomeEventListener someEventListener;
 
-
-
-    //интерфейс для взаимодействия с активити хостом MainActivityND
     public interface onSomeEventListener {
         void someEvent(String s);
     }
@@ -48,15 +44,12 @@ public class HomeFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         db = new DB(getContext());
         if(db.isListChecked()&&getValueMessageFromPreference()){
-            //подгружаем другой лайаут
             someEventListener.someEvent("3");
-
         }
     }
 
 
     @Nullable
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main_activity, container, false);
 
@@ -88,7 +81,7 @@ public class HomeFragment extends Fragment  {
         return v;
     }
 
-    //метод, получающий значение,было ли записано сообщение
+    
     boolean getValueMessageFromPreference() {
         String result = ContactPreferences.getStoredMessage(getContext());
         if(result!=null&&result.length()>0){

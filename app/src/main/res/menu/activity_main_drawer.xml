@@ -5,6 +5,7 @@
             android:id="@+id/home"
             android:icon="@drawable/home_image"
             android:title="@string/home" />
+        
         <item
             android:id="@+id/changeBatteryLevel"
             android:icon="@drawable/battery_image"
@@ -14,11 +15,17 @@
             android:id="@+id/edit_contacts"
             android:icon="@drawable/change_contacts_image"
             android:title="@string/edit_contacts" />
+        
+        <item
+            android:id="@+id/update_contacts"
+            android:title="@string/update_contacts"/>
 
         <item
             android:id="@+id/edit_message"
             android:icon="@drawable/change_message_image"
             android:title="@string/edit_messages" />
+        
+        
     </group>
 
 

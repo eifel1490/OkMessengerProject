@@ -4,9 +4,9 @@
     <string name="select_contacts_for_dispatch">Выберите контакты для СМС</string>
     <string name="choose_text_for_sms">Выберите текст для СМС</string>
     <string name="edit_data">Редактировать данные</string>
-    <string name="text_for_info_for_user">Выберите контакты,которым будут отправлятся СМС</string>
+    <string name="select_contact_to_send_message">Выберите контакты,которым будут отправлятся СМС</string>
     <string name="text_for_button_confirm">Подтвердить</string>
-    <string name="hint_text">Введите текст сообщения</string>
+    <string name="enter_your_message">Введите текст сообщения</string>
     <string name="message_text_intro">Пожалуйста,введите текст сообщения,которое будут получать выбранные
     Вами контакты</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -19,7 +19,7 @@
     <string name="cancel">Отмена</string>
     <string name="reset">Сбросить</string>
     <string name="save">Сохранить</string>
-    <string name="enter_your_message">Введите текст сообщения</string>
+    <string name="enter_your_message_text">Введите текст сообщения</string>
     <string name="content_desc">header image for navigation panel</string>
     <string name="imok">Я ВПорядке</string>
     <string name="mail">maximturkin50@gmail.com</string>
@@ -41,6 +41,7 @@
 
     <string name="rules">Правила</string>
     <string name="edit_contacts">Редактировать контакты</string>
+    <string name="update_contacts">Обновить контакты</string>
     <string name="edit_messages">Редактировать сообщение</string>
     <string name="about_version">О версии</string>
     <string name="dialog_title_licenses">Open Source Licenses</string>

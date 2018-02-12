@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 
-import com.example.imokmessenger.DataBase.ContactsDbSchema;
+
 import com.example.imokmessenger.DataBase.DB;
 import com.example.imokmessenger.Model.UserData;
 import com.example.imokmessenger.R;
@@ -29,13 +29,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
 
     public static final String TAG = "myTag";
     DB db;
-
-
-    //список контактов
     private static List<UserData> userDataList;
-    //обьект контекста
     private Context mContext;
-    //конструктор адаптера,на вход принимает список контактов и обьект контекста
+    
     public UserDataAdapter(List<UserData> userDataList, Context mContext){
         this.userDataList = userDataList;
         this.mContext = mContext;
@@ -46,27 +42,25 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         return userDataList;
     }
 
+    
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //с помощью инфлятора "надуваем" вью из макета single_contact_view
+        
         View view = LayoutInflater.from(mContext).inflate(R.layout.m_single_contact_view, parent, false);
-        //создаем обьект ContactViewHolder contactViewHolder,в конструктор передаем вью
         ContactViewHolder contactViewHolder = new ContactViewHolder(view);
         return contactViewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ContactViewHolder holder, int position) {
-        //получаем обьект Контакт из списка по позиции
+        
         final UserData userData = userDataList.get(position);
-        //с помощью обьекта holder присваиваем полям tvContactName и tvPhoneNumber значения из обьекта UserData
+        
         holder.tvContactName.setText(userData.getContactName());
         holder.tvPhoneNumber.setText(userData.getContactNumber());
 
-        //in some cases, it will prevent unwanted situations
         holder.tvCheckContact.setOnCheckedChangeListener(null);
 
-        //if true, your checkbox will be selected, else unselected
         holder.tvCheckContact.setChecked(userData.isSolved());
 
         holder.tvCheckContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -75,9 +69,8 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
 
                 if(isChecked) {
                     userDataList.get(holder.getAdapterPosition()).setSolved(isChecked);
-                    //считываем значение ИД этого обьекта userData и передаем в метод addDataToDB(String contactId)
                     addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID(),"1");
-                    //обновляем данные в БД по этому ИД
+                    
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "pressed");
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -85,6 +78,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
                 else {
                     userDataList.get(holder.getAdapterPosition()).setSolved(false);
                     addDataToDB(userDataList.get(holder.getAdapterPosition()).getContactID(),"0");
+                    
                     Intent intent = new Intent("custom-message");
                     intent.putExtra("message", "unpressed");
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
@@ -106,20 +100,19 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         holder.mColorImageView.setImageDrawable(myDrawable);
     }
 
-    //метод возвращает размер листа
+    
     @Override
     public int getItemCount() {
-        //return UserData.listAll(UserData.class).size();
         return userDataList.size();
     }
     
-    //метод,обновляющий запись в БД по ИД
+    //update an entry in the database by ID
     public void addDataToDB(String contact_Id, String index){
         Log.d(TAG,"ID =" + contact_Id);
         db.open();
-        // создаем объект для данных
+        
         ContentValues cv = new ContentValues();
-        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
+        cv.put(DB.ContactsTable.Cols.SELECTED, index);
         db.updateData(cv,contact_Id);
         db.close();
     }
