@@ -123,12 +123,12 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             if(value.length()>0) {
 
                 if (value.equals("1")) {
-                    new MyTask(s,getContext()).executeOnExecutor(prepareToStartAsyncTask());
+                    new MyTaskDownloadFromDatabase(getContext()).executeOnExecutor(prepareToStartAsyncTask());
                 }
             }
         }
         else
-            new MyTask(getContext()).executeOnExecutor(prepareToStartAsyncTask());
+            new MyTaskDownloadFromContentProvider(getContext()).executeOnExecutor(prepareToStartAsyncTask());
 
         //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
