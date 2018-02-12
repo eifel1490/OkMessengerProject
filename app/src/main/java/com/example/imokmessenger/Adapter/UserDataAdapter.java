@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 
-import com.example.imokmessenger.DataBase.ContactsDbSchema;
+
 import com.example.imokmessenger.DataBase.DB;
 import com.example.imokmessenger.Model.UserData;
 import com.example.imokmessenger.R;
@@ -112,7 +112,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.Contac
         db.open();
         
         ContentValues cv = new ContentValues();
-        cv.put(ContactsDbSchema.ContactsTable.Cols.SELECTED, index);
+        cv.put(DB.ContactsTable.Cols.SELECTED, index);
         db.updateData(cv,contact_Id);
         db.close();
     }

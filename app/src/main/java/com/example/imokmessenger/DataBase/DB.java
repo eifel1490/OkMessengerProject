@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.imokmessenger.DataBase.ContactsDbSchema;
-import com.example.imokmessenger.Model.UserData;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +48,8 @@ public class DB {
         boolean result = false;
         open();
         
-        Cursor cursor = mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                new String[]{ContactsDbSchema.ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
+        Cursor cursor = mDB.query(ContactsTable.DB_TABLE,
+                new String[]{ContactsTable.Cols.SELECTED},"selected = ?",new String[]{"1"},null,null,null);
         
         if(cursor.getCount()>0) result = true;
         cursor.close();
@@ -61,8 +60,8 @@ public class DB {
     //returns a list of checked contacts for info on the main page
     public List<String> getCheckedContacts(){
         List<String>list= new ArrayList<>();
-        Cursor c = mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
-                new String[]{ContactsDbSchema.ContactsTable.Cols.NAME},"selected = ?",new String[]{"1"},null,null,null);
+        Cursor c = mDB.query(ContactsTable.DB_TABLE,
+                new String[]{ContactsTable.Cols.NAME},"selected = ?",new String[]{"1"},null,null,null);
         if(c!=null) {
             try {
 
@@ -86,22 +85,22 @@ public class DB {
     
     
     public void insert(ContentValues cv){
-        mDB.insert(ContactsDbSchema.ContactsTable.DB_TABLE, null, cv);
+        mDB.insert(ContactsTable.DB_TABLE, null, cv);
     }
 
     
     public void deleteAllData(){
-        mDB.delete(ContactsDbSchema.ContactsTable.DB_TABLE, null, null);
+        mDB.delete(ContactsTable.DB_TABLE, null, null);
     }
 
     
     public void updateData(ContentValues cv,String contact_Id){
-        mDB.update(ContactsDbSchema.ContactsTable.DB_TABLE , cv, ContactsDbSchema.ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
+        mDB.update(ContactsTable.DB_TABLE , cv, ContactsTable.Cols.ID + " = ?",new String[] { contact_Id });
     }
 
     //returns all records where "selected" equals 1
     public Cursor queryData(){
-        return mDB.query(ContactsDbSchema.ContactsTable.DB_TABLE,
+        return mDB.query(ContactsTable.DB_TABLE,
                 null,"selected = ?",new String[]{"1"},null,null,null);
     }
     
@@ -136,7 +135,7 @@ public class DB {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(ContactsDbSchema.DB_CONTACTS_CREATE);
+            db.execSQL(DB_CONTACTS_CREATE);
         }
 
         @Override

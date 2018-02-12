@@ -191,6 +191,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             //ОТКРЫВАЕМ БАЗУ
             db = new DB(context);
             db.open();
+            circularProgressBar.setVisibility(View.GONE);
         }
         
         @Override
@@ -201,7 +202,7 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
                     userDataList = getDataFromCursor(cursor1,userDataList);
                 }
             finally {
-                    cursor1.close();
+                    //cursor1.close();
                     db.close();
                 }
             return userDataList;

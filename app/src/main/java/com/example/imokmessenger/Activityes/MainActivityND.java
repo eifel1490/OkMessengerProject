@@ -74,7 +74,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     //implementation fargments interface
     @Override
-    public void someEventInFragments(String s) {
+    public void someEvent(String s) {
         if(s == "1"){
             showFragment(new ContactListFragment());
         }
