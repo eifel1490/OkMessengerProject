@@ -31,6 +31,7 @@
     <string name="set_OK">ОК</string>
     <string name="rules">Rules</string>
     <string name="edit_contacts">Edit contacts</string>
+    <string name="update_contacts">Update contacts</string>
     <string name="edit_messages">Edit message</string>
     <string name="about_version">About version</string>
     <string name="dialog_title_licenses">Open Source Licenses</string>
