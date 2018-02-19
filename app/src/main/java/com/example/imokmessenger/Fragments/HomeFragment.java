@@ -19,6 +19,9 @@ import com.example.imokmessenger.R;
 public class HomeFragment extends Fragment  {
 
     public static final String TAG = "myLog";
+    public static final String CHOOSE_CONTACT_IDENT = "1";
+    public static final String CHOOSE_MESSAGE_IDENT = "2";
+    public static final String CHOOSE_INFOLIST_IDENT = "3";
 
     Button chooseContacts, createMessageText;
     DB db;
@@ -44,7 +47,7 @@ public class HomeFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         db = new DB(getContext());
         if(db.isListChecked()&&getValueMessageFromPreference()){
-            someEventListener.someEvent("3");
+            someEventListener.someEvent(CHOOSE_INFOLIST_IDENT);
         }
     }
 
@@ -67,14 +70,14 @@ public class HomeFragment extends Fragment  {
         chooseContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                someEventListener.someEvent("1");
+                someEventListener.someEvent(CHOOSE_CONTACT_IDENT);
             }
         });
 
         createMessageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                someEventListener.someEvent("2");
+                someEventListener.someEvent(CHOOSE_MESSAGE_IDENT);
             }
         });
 
