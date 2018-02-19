@@ -45,8 +45,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-
-/*класс отображающий список конактов для пользователя*/
 public class ContactListFragment extends Fragment implements MainActivityND.OnBackPressedListener {
 
     public static final String TAG = "ContactListActivity";
@@ -91,7 +89,6 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         
         View v = inflater.inflate(R.layout.all_contacts_activity, container, false);
-        //ОТКРЫВАЕМ БАЗУ
         db = new DB(getContext());
         db.open();
         
@@ -130,35 +127,22 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         else
             new MyTaskDownloadFromContentProvider(getContext()).executeOnExecutor(prepareToStartAsyncTask());
 
-        //инициализируем LocalBroadcastManager для "отлова" сообщений из адаптера
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("custom-message"));
 
         return v;
     }
 
-
-
-
-    //приемник локальных сообщений(транслируются только в нашем приложении)
-    // принимает локальные ссобщения из UserDataAdapter
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // получает значение из интента,пришедшего в сообщении
             String isPressed = intent.getStringExtra("message");
-            //если результат из интента ненулевой
             if(isPressed != null){
-                //и если он соответствует метке "нажато"
                 if(isPressed=="pressed") {
-                    //то кнопка Подтвердить становится активной
                     btnConfirm.setEnabled(true);
                 }
 
-                //если кнопка не нажата,то проверяем нажаты ли остальные кнопки
-                //и если ни одна не нажата,то кнопка Подтвердить неактивна
                 if(isPressed=="unpressed") {
                     if(!db.isListChecked()){
-                        //то кнопка Подтвердить становится неактивной
                         btnConfirm.setEnabled(false);
                     }
                 }
@@ -184,11 +168,11 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
             this.context = context;
         }
         
-        //метод вызывается в начале работы AsyncTask
+        
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //ОТКРЫВАЕМ БАЗУ
+            
             db = new DB(context);
             db.open();
             circularProgressBar.setVisibility(View.GONE);
@@ -202,7 +186,6 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
                     userDataList = getDataFromCursor(cursor1,userDataList);
                 }
             finally {
-                    //cursor1.close();
                     db.close();
                 }
             return userDataList;
@@ -218,7 +201,6 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
     }
 
 
-    //класс AsyncTask, выполняет операции в фоне
     private class MyTaskDownloadFromContentProvider extends AsyncTask<Void, Void, List<UserData>> {
 
         private Context context;
@@ -364,8 +346,5 @@ public class ContactListFragment extends Fragment implements MainActivityND.OnBa
         }
         return list;
     }
-
-
-
 
 }
