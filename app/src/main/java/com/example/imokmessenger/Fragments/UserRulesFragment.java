@@ -22,11 +22,8 @@ public class UserRulesFragment extends Fragment implements MainActivityND.OnBack
 
     public static final String TAG = "UserRulesFragment";
 
-    @BindView(R.id.ok_button) Button text;
+    Button okButton;
     
-    private Unbinder unbinder;
-    
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -41,14 +38,15 @@ public class UserRulesFragment extends Fragment implements MainActivityND.OnBack
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.user_rules, container, false);
-        unbinder = ButterKnife.bind(this, v);
+        okButton = (Button) v.findViewById(R.id.ok_button);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHostActivity();
+             }
+         });
 
         return  v;
-    }
-
-    @OnClick(R.id.ok_button)
-    void onButtonOkClick() {
-        goToHostActivity();
     }
 
     public void goToHostActivity(){
@@ -57,12 +55,4 @@ public class UserRulesFragment extends Fragment implements MainActivityND.OnBack
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
-    //необходимо отключить butterknife
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
 }
