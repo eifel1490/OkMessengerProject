@@ -17,21 +17,15 @@ import com.example.imokmessenger.DataBase.DB;
 import com.example.imokmessenger.R;
 import com.example.imokmessenger.YourService;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 
 
 public class BatteryLevelChangeFragment extends Fragment implements MainActivityND.OnBackPressedListener  {
 
     public static final String TAG = "BatteryLevelChangeFragment";
 
-    @BindView(R.id.editLevel_message) EditText editChargeText;
-    @BindView(R.id.button_save_charge) Button saveChargeMessage;
-    @BindView(R.id.button_cancel) Button cancelChargeMessage;
-    @BindView(R.id.button_reset) Button resetChargeButton;
-    private Unbinder unbinder;
+    EditText editChargeText;
+    Button saveChargeMessage, cancelChargeMessage, resetChargeButton;
     String chargeBatteryLevel;
     DB db;
 
@@ -53,40 +47,51 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
         db = new DB(getContext());
         db.open();
         chargeBatteryLevel = ContactPreferences.getStoredCharge(getContext());
-        unbinder = ButterKnife.bind(this, v);
+        editChargeText = (EditText) v.findViewById(R.id.editLevel_message);
+        saveChargeMessage = (Button) v.findViewById(R.id.button_save_charge);
+        cancelChargeMessage = (Button) v.findViewById(R.id.button_cancel);
+        resetChargeButton = (Button) v.findViewById(R.id.button_reset);
+        
 
         if(chargeBatteryLevel!=null){
             editChargeText.setText(String.valueOf(chargeBatteryLevel));
         }
+        
+        saveChargeMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String chargeLevel = editChargeText.getText().toString();
+
+                if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
+                    ContactPreferences.setStoredCharge(getContext(),chargeLevel);
+                    prepareToStartServise();
+                    goToHostActivity();
+                }
+                else Toast.makeText(getContext(),"Введите уровень батареи",Toast.LENGTH_SHORT).show();
+             }
+         });
+         
+         cancelChargeMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHostActivity();
+             }
+         });
+        
+         resetChargeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chargeBatteryLevel!=null){
+                    ContactPreferences.setStoredCharge(getContext(),"");
+                    editChargeText.setText(String.valueOf(""));
+                }
+             }
+         });
 
         return  v;
     }
 
-    @OnClick(R.id.button_save_charge)
-    void onButtonSaveChargeClick() {
-        String chargeLevel = editChargeText.getText().toString();
-
-        if(chargeLevel.length()>0&&Integer.parseInt(chargeLevel)<=100&&Integer.parseInt(chargeLevel)>0){
-            ContactPreferences.setStoredCharge(getContext(),chargeLevel);
-            prepareToStartServise();
-            goToHostActivity();
-        }
-        else Toast.makeText(getContext(),"Введите уровень батареи",Toast.LENGTH_SHORT).show();
-    }
-
-    @OnClick (R.id.button_cancel)
-    void onButtonCancelClick() {
-        goToHostActivity();
-    }
-
-    @OnClick (R.id.button_reset)
-    void onButtonResetClick() {
-        if(chargeBatteryLevel!=null){
-            ContactPreferences.setStoredCharge(getContext(),"");
-            editChargeText.setText(String.valueOf(""));
-        }
-    }
-
+    
     @Override
     public void onPause() {
         super.onPause();
@@ -97,13 +102,6 @@ public class BatteryLevelChangeFragment extends Fragment implements MainActivity
         Intent intent = new Intent(getContext(),MainActivityND.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    //необходимо отключить butterknife
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     public void prepareToStartServise(){
