@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- Services -->
+        
         <service
             android:name=".YourService"
             android:enabled="true"
@@ -30,7 +30,7 @@
 
         </activity>
 
-        <!-- Receivers -->
+       
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true" />
