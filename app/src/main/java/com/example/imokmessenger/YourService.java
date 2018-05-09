@@ -26,30 +26,21 @@ public class YourService extends Service {
 
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Сервис создан");
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG,"onStartCommand в сервисе запущен");
-
-        //после перезагрузки телефона запускаем AlarmReceiver
+        
         if (intent != null && intent.hasExtra(BootReceiver.ACTION_BOOT)){
-            Log.d(TAG,"Action Boot");
             AlarmReceiver.startAlarms(YourService.this.getApplicationContext());
         }
         if (intent != null && intent.hasExtra(BATTERY_UPDATE)){
-            Log.d(TAG,"запущено после обновления уровня заряда.Теперь должен сработать" +
-                    "BatteryCheckAsync");
             new BatteryCheckAsync().execute();
         }
         if (intent != null && intent.hasExtra(HANDLE_REBOOT)){
-            Log.d(TAG,"запущено после HANDLE_REBOOT");
             AlarmReceiver.startAlarms(YourService.this.getApplicationContext());
         }
-
-        // сервис будет восстановлен после убийства системой
         return START_STICKY;
     }
 
@@ -63,7 +54,7 @@ public class YourService extends Service {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            Log.d(TAG,"doInBackground стартовал");
+            
             String batteryChargeLevel = ContactPreferences.getStoredCharge(getBaseContext());
 
             IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -72,40 +63,35 @@ public class YourService extends Service {
             int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                     status == BatteryManager.BATTERY_STATUS_FULL;
-            Log.d(TAG, "Батарея заряжается? " + isCharging);
+            
 
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             int percent = (level * 100) / scale;
 
             if(!isCharging) {
-                Log.d(TAG, "Уровень заряда батареи: " + percent);
+                
                 if (batteryChargeLevel != null &&
                         batteryChargeLevel.length() > 0) {
-                    Log.d(TAG, "stored value = " + batteryChargeLevel);
+                    
                     boolean flag = false;
 
                     while (percent == Integer.parseInt(batteryChargeLevel)) {
 
                         if (!flag) {
-                            Log.d(TAG, "Подготовка к отправке сообщения");
                             sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
-                            Log.d(TAG, "Сообщение отправлено успешно после" +
-                                    "достижения уровня батареи " + percent);
                             flag = true;
                         }
                     }
 
                 } else if (batteryChargeLevel == null || batteryChargeLevel.length() == 0) {
-                    Log.d(TAG, "пользователь не указывал значение заряда,сообщение будет" +
-                            "отправлено в штатном режиме 5 процентов");
+                   
                     boolean flag = false;
 
                     while (percent == 5) {
 
                         if (!flag) {
                             sendMessageToContacts(fillListCheckedContacts(getApplication()), getBaseContext());
-                            Log.d(TAG, "Сообщение отправлено успешно в штатном режиме 5 процентов заряда");
                             flag = true;
                         }
                     }
@@ -115,7 +101,7 @@ public class YourService extends Service {
             return null;
         }
 
-        //метод формирующий ArrayList из чекнутых контактов
+        
         public List<String> fillListCheckedContacts(Context context){
             Log.d(TAG,"fillListCheckedContacts");
             List<String> list = new ArrayList<>();
@@ -129,7 +115,7 @@ public class YourService extends Service {
 
                     do {
                         list.add(c.getString(phoneColIndex));
-                        // переход на следующую строку ,а если следующей нет (текущая - последняя), то false - выходим из цикла
+                        
                     }
                     while (c.moveToNext());
                 }
@@ -142,23 +128,17 @@ public class YourService extends Service {
 
             db.close();
             for(String s:list){
-                Log.d(TAG,"Выбран контакт : "+s);
+                
             }
             return list;
         }
 
         public void sendMessageToContacts(List<String> list,Context context) {
             String message = ContactPreferences.getStoredMessage(context);
-            Log.d(TAG, "sendMessageToContacts");
-            //проходим по листу
-            //for (int i = 0; i < list.size(); i++) {
-                //для каждого контакта вызываем метод sendSMSMessage
-            //    Log.d(TAG,"Сообщение отправлено :"+list.get(i));
-            //    sendSMSMessage(list.get(i), message);
-            //    break;
-            //}
+            
+            
             for(String s:list){
-                Log.d(TAG,"Сообщение отправлено :"+s);
+                
                 sendSMSMessage(s, message);
             }
         }
