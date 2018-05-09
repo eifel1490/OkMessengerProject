@@ -35,7 +35,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     protected OnBackPressedListener onBackPressedListener;
 
-    //implementation of pressing a Back button in fragments 
+     
     public interface OnBackPressedListener {
         void doBack();
     }
@@ -72,7 +72,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
 
     }
 
-    //implementation fargments interface
+    
     @Override
     public void someEvent(String s) {
         if(s == "1"){
@@ -101,7 +101,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         }
     }
 
-    //handler for menu items
+    
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -133,7 +133,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         
         if(id == R.id.about_version){
             LicenseFragment licensesFragment = new LicenseFragment();
-            //показываем фрагмент
             licensesFragment.show((this).getSupportFragmentManager().beginTransaction(), "dialog_licenses");
         }
 
@@ -143,7 +142,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    //displays a fragment in the container
+    
     public void showFragment(Fragment fragment){
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -158,15 +157,14 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         super.onDestroy();
     }
 
-    //set locale in contast
+    
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
-    //update activity with new locale
+    
     private void updateViews(String languageCode) {
-        Log.d(TAG,"updateViews is called");
         LocaleHelper.setLocale(getApplication(), languageCode);
         updateScreen();
     }
@@ -177,7 +175,7 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    ////handler for menu items in ActionBar
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -202,7 +200,6 @@ public class MainActivityND extends AppCompatActivity implements NavigationView.
         //overridePendingTransition(0,0);
         startActivity(getIntent());
         //overridePendingTransition(0,0);
-
     }
 
 
