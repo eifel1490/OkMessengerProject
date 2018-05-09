@@ -12,7 +12,6 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equalsIgnoreCase(ACTION_BOOT)) {
-            // This intent action can only be set by the Android system after a boot
             Intent monitorIntent = new Intent(context, YourService.class);
             monitorIntent.putExtra(YourService.HANDLE_REBOOT, true);
             context.startService(monitorIntent);
